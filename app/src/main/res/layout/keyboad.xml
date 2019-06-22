@@ -1,0 +1,2049 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/KeyboardView"
+    android:layout_width="match_parent"
+    android:layout_height="210dp"
+    android:layout_alignParentBottom="true"
+    android:layout_below="@+id/xsubLayout"
+    android:background="#000"
+    android:gravity="bottom"
+    android:orientation="vertical"
+    android:paddingTop="2dp"
+    android:visibility="visible">
+
+    <LinearLayout
+        android:id="@+id/fixedRow1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row1TopMargin">
+
+        <Button
+            android:id="@+id/toggleButton"
+            style="@style/buttonStyle"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonConsonants"
+            android:textSize="@dimen/buttonTextSize"
+
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/chilluButton"
+            style="@style/buttonStyle"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonChillu"
+            
+            android:textSize="@dimen/buttonTextSize"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/buttonSpace"
+            style="@style/buttonStyle"
+            android:src="@drawable/ic_space_bar_white_24dp"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonSpace"
+            android:textSize="@dimen/buttonTextSize"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/backspace"
+            style="@style/buttonStyle"
+            android:src="@android:drawable/ic_input_delete"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonBackspace"
+            android:textSize="@dimen/buttonTextSize"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fixedRow2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row2MarginTop">
+
+        <Button
+            android:id="@+id/symButton8"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+            />
+
+        <Button
+            android:id="@+id/symButton1"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/symButton2"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/symButton3"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/symButton4"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/symButton5"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/symButton6"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/moreToSymbol2"
+            style="@style/buttonStyle"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonMore"
+            
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/chilluRow"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row2MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/chilluButton1"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/chilluButton2"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/chilluButton3"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/chilluButton4"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/chilluButton5"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/dummyChillu1"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/dummyChillu2"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            android:visibility="visible" />
+
+        <Button
+            android:id="@+id/dummyChillu3"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/fixedRow3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row2MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/backToSymbol1"
+            style="@style/buttonStyle"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonMore"
+            
+            android:textColor="@color/buttonTextColor"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/symButton7"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/symButton9"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/symButton10"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/symButton11"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            style="@style/buttonStyle"
+
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/symButton12"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/symButton13"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            style="@style/buttonStyle"
+
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/symButton14"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            style="@style/buttonStyle"
+
+            />
+
+        <Button
+            android:id="@+id/symButton15"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vowRow1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row3MarginTop">
+
+        <Button
+            android:id="@+id/vowButton1"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton2"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton3"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton4"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton5"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton6"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton7"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton8"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vowRow2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row4MarginTop">
+
+        <Button
+            android:id="@+id/vowButton9"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton10"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton11"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton12"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton13"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton14"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton15"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton16"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vowRow3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row5MarginTop">
+
+        <Button
+            android:id="@+id/vowButton17"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton18"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton19"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton20"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton21"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton22"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton23"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/moreTo2"
+            style="@style/buttonStyle"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonMore"
+            
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vowRow4"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row3MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/vowButton24"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton25"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton26"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton27"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton28"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton29"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton30"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton31"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vowRow5"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row4MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/vowButton32"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton33"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton34"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton35"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton36"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton37"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton38"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton39"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vowRow6"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row5MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/backTo1"
+            style="@style/buttonStyle"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonMore"
+            
+            android:textColor="@color/buttonTextColor"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/vowButton40"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton41"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton42"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton43"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/vowButton44"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/dummy1"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/dummy2"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/numSymRow1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row2MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/numSymButton1"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/numSymButton2"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/numSymButton3"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/numSymButton4"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/numSymButton5"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/numSymButton6"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/numSymButton7"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0" 
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton8"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/numSymRow2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row3MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/numSymButton9"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight" 
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButtoncenter_vertical"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left" 
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton11"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton12"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight" 
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton13"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton14"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0" 
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton15"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton16"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/numSymRow3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row4MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/numSymButton17"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0" 
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton18"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton19"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton20"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0" 
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton21"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0" 
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton22"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton23"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton24"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/numSymRow4"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row5MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/numSymButton25"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton26"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton27"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton28"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton29"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton30"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton31"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/numSymButton32"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true"
+            android:visibility="invisible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/consRow1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row3MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/consButton1"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton2"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton3"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton4"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton5"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton6"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton7"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/consRow2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row4MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/consButton8"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton9"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton10"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton11"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton12"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton13"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton14"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/consRow3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row5MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/consButton15"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton16"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton17"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton18"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton19"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton20"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/moreToCons"
+            style="@style/buttonStyle"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonMore"
+            android:textColor="@color/buttonTextColor"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/consRow4"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row3MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/consButton21"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton22"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton23"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton24"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton25"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton26"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton27"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/consRow5"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row4MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/consButton28"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton29"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton30"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton31"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton32"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton33"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton34"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/consRow6"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row5MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/backToCons"
+            style="@style/buttonStyle"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonMore" 
+            android:textColor="@color/buttonTextColor"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/consButton35"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp" 
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton36"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton37"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton38"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton39"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/moreToCons2"
+            style="@style/buttonStyle"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonMore"
+            android:textColor="@color/buttonTextColor"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/consRow7"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row3MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/consButton40"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton41"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton42"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton43"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton44"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton45"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton46"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/consRow8"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row4MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/consButton47"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton48"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton49"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton50"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton51"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton52"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton53"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/consRow9"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/rowHeight"
+        android:layout_marginTop="@dimen/row5MarginTop"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/backToCons2"
+            style="@style/buttonStyle"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+            android:text="@string/buttonMore"
+            android:textColor="@color/buttonTextColor"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/consButton54"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton55"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton56"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="left"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true" />
+
+        <Button
+            android:id="@+id/consButton57"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/consButton58"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="@dimen/buttonMarginRight"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+
+        <Button
+            android:id="@+id/consButton59"
+            android:layout_width="@dimen/buttonWidth"
+            android:layout_height="@dimen/buttonHeight"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1.0"
+            android:padding="0dp"
+            android:soundEffectsEnabled="true"
+             />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="u"
+        
+        android:visibility="gone" />
+</RelativeLayout>

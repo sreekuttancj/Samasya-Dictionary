@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">Samasya</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+
+    <string name="app_version">Samasya 1.5</string>
+    <string name="ad_unit_id">ca-app-pub-9331579017320394/6982145067</string>
+
+    <string name="home">Home</string>
+    <string name="favourite">Favourite</string>
+    <string name="history">History</string>
+    <string name="share_app">Share this app</string>
+    <string name="rate_app">Rate us</string>
+    <string name="about">About</string>
+    <string name="communicate">Communicate</string>
+    <string name="block_add">Block Ads</string>
+    <string name="share_whatsapp">Share On Whatsapp</string>
+    <string name="share_content">Share Now On Whatsapp to 5 Different Groups/Friends for Block Ads</string>
+
+    <string name="btn_like_us">Like us on Facebook</string>
+    <string name="btn_like_us_plus">Follow us on Google+</string>
+    <string name="btn_whats_app">+91 8943616564</string>
+
+    <string name="google_translate">Google Translate</string>
+
+    <string name="dictionary_type">English - Malayalam</string>
+    <string name="dictionary_type1">Malayalam - English</string>
+
+    <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
+    <string name="speech_prompt">Say something&#8230;</string>
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+    <string name="buttonBackspace">\u232b</string>
+    <string name="buttonSpace" />
+    <string name="buttonConsonants">\u00a1</string>
+    <string name="buttonChillu">A</string>
+    <string name="buttonMore">\u2026</string>
+    <string name="searchWordHint">Search</string>
+    <string name="searchWordHintMalayalam">XncbpI</string>
+    <string name="feedback">Sorry, Word not found Please send this word to us </string>
+
+</resources>

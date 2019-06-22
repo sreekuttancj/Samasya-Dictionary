@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/copy"
+        android:icon="@drawable/ic_content_copy_black_24dp"
+        android:title="Copy"
+        />
+
+    <item
+        android:id="@+id/select_all"
+        android:icon="@drawable/ic_done_all_black_24dp"
+        android:title="Select All"
+        />
+    <item
+        android:id="@+id/delete"
+        android:icon="@drawable/ic_delete_black_24dp"
+        android:title="delete"/>
+</menu>

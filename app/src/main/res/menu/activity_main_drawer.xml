@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/home"
+            android:icon="@drawable/nav_home"
+            android:title="@string/home" />
+        <item
+            android:id="@+id/favourite"
+            android:icon="@drawable/nav_fav"
+            android:title="@string/favourite" />
+        <item
+            android:id="@+id/history"
+            android:icon="@drawable/nav_his"
+            android:title="@string/history" />
+        <item
+            android:id="@+id/block_add"
+            android:title="@string/block_add"
+            android:icon="@drawable/block_ad"
+            />
+        <item
+            android:id="@+id/google_translate"
+            android:title="@string/google_translate"
+            android:icon="@drawable/ic_google_translate"
+            />
+
+    </group>
+
+    <item android:title="@string/communicate">
+        <menu>
+            <item
+                android:id="@+id/share"
+                android:icon="@drawable/share"
+                android:title="@string/share_app" />
+            <item
+                android:id="@+id/rate"
+                android:icon="@drawable/rate"
+                android:title="@string/rate_app" />
+            <item
+                android:id="@+id/about"
+                android:icon="@drawable/about_app"
+                android:title="@string/about" />
+        </menu>
+    </item>
+
+</menu>

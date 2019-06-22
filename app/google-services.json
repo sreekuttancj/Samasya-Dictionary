@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "988488320956",
+    "firebase_url": "https://samasya-1424f.firebaseio.com",
+    "project_id": "samasya-1424f",
+    "storage_bucket": "samasya-1424f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:988488320956:android:656e69e3ea522dfe",
+        "android_client_info": {
+          "package_name": "malayalamdictionary.samasya"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "988488320956-o44jjtv3gm4j72e9pl4rf67ptvoifh73.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "malayalamdictionary.samasya",
+            "certificate_hash": "C97B2EAD372CDC88612E0F0C4DDB888E2FC92D96"
+          }
+        },
+        {
+          "client_id": "988488320956-qhrsa2kibtmikq2aqvb153ip7n6f5p55.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDH1P1cyTcdJOu1I5zyPt9cfgxIWUE7kz0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "988488320956-qhrsa2kibtmikq2aqvb153ip7n6f5p55.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

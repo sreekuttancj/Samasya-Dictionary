@@ -1,0 +1,32 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_height">160dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="hint">20sp</dimen>
+
+
+    <dimen name="definitionHeadFontsize">20.0sp</dimen>
+    <dimen name="definitionFontsize">20.0sp</dimen>
+    <dimen name="homeTableRowPadding">0.0dip</dimen>
+    <dimen name="homeButtonWidth">150.0dip</dimen>
+    <dimen name="homeButtonHeight">130.0dip</dimen>
+    <dimen name="homeRowPaddingTop">15.0dip</dimen>
+    <dimen name="homeRowMargin">0.0dip</dimen>
+    <dimen name="row1TopMargin">1.0dip</dimen>
+    <dimen name="row2MarginTop">43.0dip</dimen>
+    <dimen name="row3MarginTop">84.0dip</dimen>
+    <dimen name="row4MarginTop">125.0dip</dimen>
+    <dimen name="row5MarginTop">166.0dip</dimen>
+    <dimen name="buttonWidth">0.0dip</dimen>
+    <dimen name="buttonWidthx2">64.0sp</dimen>
+    <dimen name="buttonHeight">40.0sp</dimen>
+    <dimen name="buttonMarginRight">1.0dip</dimen>
+    <dimen name="buttonMarginBottom">-6.0dip</dimen>
+    <dimen name="rowHeight">42.0sp</dimen>
+    <dimen name="topButtonTextSize">15.0sp</dimen>
+    <dimen name="buttonTextSize">20.0sp</dimen>
+
+</resources>
