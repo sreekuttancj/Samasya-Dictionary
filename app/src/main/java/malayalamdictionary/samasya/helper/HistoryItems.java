@@ -21,13 +21,6 @@ public class HistoryItems {
             this.name = name;
         }
 
-        public boolean isSelected() {
-            return this.selected;
-        }
-
-        public void setSelected(boolean selected) {
-            this.selected = selected;
-        }
     }
 
 
