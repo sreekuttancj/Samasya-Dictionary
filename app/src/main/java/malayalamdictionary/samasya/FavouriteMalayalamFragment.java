@@ -270,7 +270,7 @@ public class FavouriteMalayalamFragment extends Fragment {
 
 
 
-    public void getDataFromDb(){
+    private void getDataFromDb(){
 
         DatabaseHelper myDbHelper2 = new DatabaseHelper(getActivity());
         try {
@@ -289,7 +289,7 @@ public class FavouriteMalayalamFragment extends Fragment {
         }
     }
 
-    public ArrayList<String> getMeaningFromDb(String word){
+    private ArrayList<String> getMeaningFromDb(String word){
 
         DatabaseHelper myDbHelper2 = new DatabaseHelper(getActivity());
         try {
@@ -310,7 +310,7 @@ public class FavouriteMalayalamFragment extends Fragment {
         return meaningArray;
     }
 
-    public int GetDipsFromPixel(float pixels)
+    private int GetDipsFromPixel(float pixels)
     {
         // Get the screen's density scale
         final float scale = getResources().getDisplayMetrics().density;
