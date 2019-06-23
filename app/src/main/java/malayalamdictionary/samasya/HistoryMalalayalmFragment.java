@@ -2,16 +2,14 @@ package malayalamdictionary.samasya;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.Toolbar;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Display;
@@ -274,7 +272,7 @@ public class HistoryMalalayalmFragment extends Fragment {
             historyItems = new ArrayList<>();
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                historyItems.add(new HistoryItems(cursor.getString(0), false));
+                historyItems.add(new HistoryItems(cursor.getString(0)));
                 cursor.moveToNext();
             }
             cursor.close();

@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.graphics.Point;
 import android.os.AsyncTask;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.os.Bundle;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
@@ -279,7 +279,7 @@ public class FavouriteMalayalamFragment extends Fragment {
             favouriteItems = new ArrayList<>();
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                favouriteItems.add(new FavouriteItem(cursor.getString(0), false));
+                favouriteItems.add(new FavouriteItem(cursor.getString(0)));
                 cursor.moveToNext();
             }
             cursor.close();

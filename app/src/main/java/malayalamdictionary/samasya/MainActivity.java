@@ -13,22 +13,21 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.IdRes;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.IdRes;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.appcompat.widget.Toolbar;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -41,9 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.NativeExpressAdView;
-import com.google.android.gms.common.api.GoogleApiActivity;
+
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -62,6 +59,7 @@ import malayalamdictionary.samasya.database.DatabaseHelper;
 import malayalamdictionary.samasya.helper.ConnectionDetector;
 import malayalamdictionary.samasya.helper.FlipAnimation;
 import malayalamdictionary.samasya.helper.OnSwipeTouchListener;
+
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -91,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BottomBar mBottomBar;
     private CoordinatorLayout coordinatorLayout;
 
-    NativeExpressAdView adView;
+//    NativeExpressAdView adView;
     String fromFav="null";
     String fromHis="null";
 
@@ -152,11 +150,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         final ConnectionDetector connectionDetector=new ConnectionDetector(getApplicationContext());
         pref = getApplicationContext().getSharedPreferences(AdblockActivity.MyPREFERENCES, MODE_PRIVATE);
 
-        adView = (NativeExpressAdView)findViewById(R.id.adView_native);
-        if (pref.getInt(AdblockActivity.COUNT,5)>0) {
-
-            adView.loadAd(new AdRequest.Builder().build());
-        }
+//        Log.d("admob_id",getString(R.string.ad_unit_id));
+//        adView = (NativeExpressAdView)findViewById(R.id.adView_native);
+//        if (pref.getInt(AdblockActivity.COUNT,5)>0) {
+//
+//            adView.loadAd(new AdRequest.Builder().build());
+//        }
 
         relayoutFirstPage=(RelativeLayout) findViewById(R.id.re_first);
         relayoutSecondPage= (RelativeLayout) findViewById(R.id.re_second);
@@ -821,7 +820,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                         imageButtonSearch.setVisibility(View.GONE);
                         mBottomBar.hide();
-                        adView.setVisibility(View.GONE);
+//                        adView.setVisibility(View.GONE);
                     }
                     else {
 
@@ -848,7 +847,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 else {
 
                     floatingActionButton.setVisibility(View.VISIBLE);
-                    adView.setVisibility(View.GONE );
+//                    adView.setVisibility(View.GONE );
                     if (englishToMayalayam) {
                         imageButtonMic.setVisibility(View.VISIBLE);
                     }
@@ -1041,7 +1040,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 cardViewListBack.setVisibility(View.GONE);
             }
             listViewMeaning.setVisibility(View.VISIBLE);
-            adView.setVisibility(View.GONE);
+//            adView.setVisibility(View.GONE);
             if (englishToMayalayam) {
                 mBottomBar.show();
                 listViewMeaning.setAdapter(meaningAdapter);
@@ -1166,7 +1165,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (v.getId()==R.id.autoCompleteTextView) {
 
-            adView.setVisibility(View.GONE);
+//            adView.setVisibility(View.GONE);
             mBottomBar.hide();
             if (!englishToMayalayam){
                 showKeyboard();
@@ -1198,7 +1197,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             cardViewListMeaningBack.setVisibility(View.GONE);
             if (pref.getInt(AdblockActivity.COUNT,5)>0) {
 
-                adView.setVisibility(View.VISIBLE);
+//                adView.setVisibility(View.VISIBLE);
             }
             relativeLayoutFeedback.setVisibility(View.GONE);
 
@@ -1207,7 +1206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId()==R.id.textViewHint){
 
             textViewHint.setVisibility(View.GONE);
-            adView.setVisibility(View.GONE);
+//            adView.setVisibility(View.GONE);
             autoCompleteTextView.setVisibility(View.VISIBLE);
             autoCompleteTextView.requestFocus();
             mBottomBar.hide();

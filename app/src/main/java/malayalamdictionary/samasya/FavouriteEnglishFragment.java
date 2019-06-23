@@ -2,7 +2,7 @@ package malayalamdictionary.samasya;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -300,7 +300,7 @@ public class FavouriteEnglishFragment extends Fragment {
             favouriteItems = new ArrayList<>();
             cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
-                favouriteItems.add(new FavouriteItem(cursor.getString(0), false));
+                favouriteItems.add(new FavouriteItem(cursor.getString(0)));
                 cursor.moveToNext();
             }
             cursor.close();
