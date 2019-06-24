@@ -35,7 +35,7 @@ import malayalamdictionary.samasya.database.DatabaseHelper;
 import malayalamdictionary.samasya.helper.HistoryItems;
 
 public class HistoryEnglishFragment extends Fragment {
-
+    //todo history deletion bug,check favorite deletion also
 
     HistoryAdapter listAdapter;
     ExpandableListView expListView;
@@ -215,7 +215,7 @@ public class HistoryEnglishFragment extends Fragment {
                                                 Cursor cursor = databaseHelper.getWritableDatabase().rawQuery("delete From samasya_eng_history where ENG like '" + historyItems.getName() + "'", null);
                                                 cursor.moveToFirst();
                                                 while (!cursor.isAfterLast()) {
-                                                    cursor.moveToNext();
+                                                   cursor.moveToNext();
                                                 }
                                                 cursor.close();
                                             } catch (SQLException sqle) {

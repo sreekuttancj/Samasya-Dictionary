@@ -28,7 +28,14 @@ class FavouriteAdapter(context: Context,listDataHeader: MutableList<FavouriteIte
     }
 
     override fun getGroup(groupPosition: Int): Any {
-        return this.listDataHeader[groupPosition]
+        try {
+            return this.listDataHeader[groupPosition]
+        }
+    catch (e : Exception )
+    {
+        Toast.makeText(mContext, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
+    }
+    return true
     }
 
     override fun isChildSelectable(p0: Int, p1: Int): Boolean {
@@ -44,8 +51,8 @@ class FavouriteAdapter(context: Context,listDataHeader: MutableList<FavouriteIte
         val favouriteItem: FavouriteItem = getGroup(groupPosition) as FavouriteItem
         val headerTitle = favouriteItem.name
         if (mConvertView == null) {
-            val infalInflater: LayoutInflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-            mConvertView = infalInflater.inflate(R.layout.expandable_listview_layout, null)
+            val layoutInflater: LayoutInflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            mConvertView = layoutInflater.inflate(R.layout.expandable_listview_layout, null)
         }
 
         val tf = Typeface.createFromAsset(mContext.resources.assets, "fonts/mal.ttf")

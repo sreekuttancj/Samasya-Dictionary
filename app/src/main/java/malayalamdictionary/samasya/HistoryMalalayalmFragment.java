@@ -9,7 +9,7 @@ import android.graphics.Point;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
-import androidx.appcompat.widget.Toolbar;
+
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Display;
@@ -56,10 +56,9 @@ public class HistoryMalalayalmFragment extends Fragment {
         rowView = inflater.inflate(R.layout.fragment_history, container, false);
 
 
-        expListView = (ExpandableListView) rowView.findViewById(R.id.lvExp_history);
-        listDataHeader = new ArrayList<HistoryItems>();
-        listDataChild = new HashMap<String, List<String>>();
-
+        expListView = rowView.findViewById(R.id.lvExp_history);
+        listDataHeader = new ArrayList<>();
+        listDataChild = new HashMap<>();
 
         Display display = getActivity().getWindowManager().getDefaultDisplay();
         Point size = new Point();

@@ -882,7 +882,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             c2.close();
-            listItemAdapter=new ListItemAdapter(getApplicationContext(),strings,this,cardViewList);
+            listItemAdapter=new ListItemAdapter(getApplicationContext(),strings,this);
             if (listItemAdapter.getCount()!=0){
                 cardViewList.setVisibility(View.VISIBLE);
                 cardViewListMeaning.setVisibility(View.GONE);
@@ -911,7 +911,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             c2.close();
-            listItemAdapter = new ListItemAdapter(getApplicationContext(), strings, this, cardViewListMeaningBack);
+            listItemAdapter = new ListItemAdapter(getApplicationContext(), strings, this);
             if (listItemAdapter.getCount() != 0) {
                 cardViewListBack.setVisibility(View.VISIBLE);
                 cardViewListMeaningBack.setVisibility(View.GONE);
