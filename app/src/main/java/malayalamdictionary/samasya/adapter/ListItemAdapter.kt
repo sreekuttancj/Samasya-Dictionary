@@ -11,6 +11,7 @@ import android.widget.Filterable
 import android.widget.TextView
 import malayalamdictionary.samasya.MainActivity
 import malayalamdictionary.samasya.R
+import malayalamdictionary.samasya.helper.Common
 import java.util.ArrayList
 
 class ListItemAdapter(context: Context,items: ArrayList<String>, mainActivity: MainActivity): BaseAdapter(), Filterable{
@@ -32,7 +33,7 @@ class ListItemAdapter(context: Context,items: ArrayList<String>, mainActivity: M
         textViewAutoComplete = mConvertView!!.findViewById(R.id.textView_autocomplete)
 
         val type = Typeface.createFromAsset(context.getAssets(), "fonts/mal.ttf")
-        if (MainActivity.englishToMayalayam) {
+        if (Common.englishToMayalayam) {
             textViewAutoComplete.typeface = Typeface.DEFAULT
         } else {
             textViewAutoComplete.typeface = type

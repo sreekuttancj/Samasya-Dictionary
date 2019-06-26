@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import malayalamdictionary.samasya.HistoryEnglishFragment
-import malayalamdictionary.samasya.HistoryMalalayalmFragment
+import malayalamdictionary.samasya.HistoryMalayalamFragment
 
 class HistoryPagerAdapter(fm: FragmentManager , val mNumOfTabs: Int) : FragmentStatePagerAdapter(fm) {
     override fun getItem(position: Int): Fragment? {
@@ -13,7 +13,7 @@ class HistoryPagerAdapter(fm: FragmentManager , val mNumOfTabs: Int) : FragmentS
                 HistoryEnglishFragment()
             }
             1 -> {
-                HistoryMalalayalmFragment()
+                HistoryMalayalamFragment()
             }
             else -> null
         }
