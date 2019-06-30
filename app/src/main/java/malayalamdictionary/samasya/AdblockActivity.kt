@@ -30,7 +30,7 @@ class AdblockActivity : AppCompatActivity()  {
         setContentView(R.layout.activity_adblock)
 
         val mToolbar = findViewById<Toolbar>(R.id.toolbar)
-        textViewCount = findViewById<TextView>(R.id.textView_count)
+        textViewCount = findViewById(R.id.textView_count)
         val buttonShare = findViewById<Button>(R.id.button_share)
         pref = applicationContext.getSharedPreferences(Common.MyPREFERENCES, Context.MODE_PRIVATE)
         editor = pref.edit()

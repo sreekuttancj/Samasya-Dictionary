@@ -17,6 +17,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        customDebugType{
+            debuggable = true
+        }
     }
 }
 
@@ -33,7 +36,7 @@ dependencies {
     compile 'io.github.kobakei:ratethisapp:1.0.5'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
-//    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
 }
 

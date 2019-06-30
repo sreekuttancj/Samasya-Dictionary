@@ -194,7 +194,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(applicationContext, "No internet connection", Toast.LENGTH_LONG).show()
             }
         }
-        imageButtonSearch = findViewById<ImageButton>(R.id.search_word)
+        imageButtonSearch = findViewById(R.id.search_word)
         imageButtonSearch.setOnClickListener(this)
         relayoutFirstPage.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeTop() {}
@@ -945,7 +945,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         if (autoCompleteTextView.text.toString().trim { it <= ' ' } != "") {
 
-            val databaseHelper = DatabaseHelper(application)
+            val databaseHelper = DatabaseHelper(this)
             val favourite = autoCompleteTextView.text.toString().trim { it <= ' ' }
             try {
                 databaseHelper.open()
