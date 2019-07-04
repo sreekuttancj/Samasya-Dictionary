@@ -15,7 +15,6 @@ import malayalamdictionary.samasya.helper.Common
 import malayalamdictionary.samasya.helper.ConnectionDetector
 
 class AdblockActivity : AppCompatActivity()  {
-    //todo remove add block activity class
 
     private var checkCount: Int = 0
     private var isInternetPresent: Boolean = false

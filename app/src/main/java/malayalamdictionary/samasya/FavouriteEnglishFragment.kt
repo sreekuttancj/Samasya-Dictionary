@@ -9,6 +9,7 @@ import android.database.SQLException
 import android.graphics.Point
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.SparseBooleanArray
 import android.view.*
 import android.widget.AbsListView
 import android.widget.ExpandableListView
@@ -18,8 +19,7 @@ import androidx.fragment.app.Fragment
 import malayalamdictionary.samasya.adapter.FavouriteAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
 import malayalamdictionary.samasya.helper.FavouriteItem
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 class FavouriteEnglishFragment : Fragment() {
     private lateinit var favouriteItems: MutableList<FavouriteItem>
@@ -35,6 +35,7 @@ class FavouriteEnglishFragment : Fragment() {
     private lateinit var copyText: String
     private lateinit var progress: ProgressDialog
     private lateinit var favouriteTask: FavouriteTask
+    private lateinit var expandedItem: SparseBooleanArray
     var expanded = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,6 +45,7 @@ class FavouriteEnglishFragment : Fragment() {
         expListView = rowView.findViewById(R.id.lvExp_favourite) as ExpandableListView
         listDataHeader = ArrayList()
         listDataChild = HashMap()
+        expandedItem = SparseBooleanArray()
 
         val display = activity!!.windowManager.defaultDisplay
         val size = Point()
@@ -59,35 +61,47 @@ class FavouriteEnglishFragment : Fragment() {
 
         expListView.setOnGroupClickListener { expandableListView, view, i, l ->
             expanded = !expandableListView.isGroupExpanded(i)
+            if (!actionModeEnabled && expanded) {
+                expandedItem.put(i, expanded)
+            }
+            if (!expanded && expandedItem[i]) {
+                expandedItem.delete(i)
+            }
 
             if (actionModeEnabled) {
-
                 expandableListView.setItemChecked(i, !expandableListView.isItemChecked(i))
             }
             actionModeEnabled
         }
-        expListView.setMultiChoiceModeListener(object: AbsListView. MultiChoiceModeListener{
+        expListView.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener {
             override fun onItemCheckedStateChanged(mode: ActionMode, position: Int, id: Long, checked: Boolean) {
-                val checkedCount = expListView.checkedItemCount
-                mode.title = checkedCount.toString()
-                listAdapter.toggleSelection(position)
-                val selected = listAdapter.getSelectedIds()
+                if (expandedItem.size() == 0) {
+                    val checkedCount = expListView.checkedItemCount
+                    mode.title = checkedCount.toString()
+                    listAdapter.toggleSelection(position)
+                    val selected = listAdapter.getSelectedIds()
 
-                if (checkedCount > 1) {
-                    menuItem.isVisible = false
-                } else {
+                    if (checkedCount > 1) {
+                        menuItem.isVisible = false
+                    } else {
 
-                    if (selected!!.valueAt(0)) {
-                        copyText = listAdapter.getGroupItem(selected.keyAt(0)).toString()
+                        if (selected!!.valueAt(0)) {
+                            copyText = listAdapter.getGroupItem(selected.keyAt(0)).toString()
 
+                        }
+                        menuItem.isVisible = true
                     }
-                    menuItem.isVisible = true
+                    selectAll = checkedCount != listAdapter.groupCount
+                } else {
+                    //if any of the item is expanded then refresh the adapter
+
+                    Toast.makeText(activity, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
+                    expandedItem.clear()
+                    expListView.setAdapter(listAdapter)
 
                 }
-
-                selectAll = checkedCount != listAdapter.groupCount
-
             }
+
             override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
                 val menuInflater = activity!!.menuInflater
                 menuInflater.inflate(R.menu.favourite_menu, menu)
@@ -96,6 +110,7 @@ class FavouriteEnglishFragment : Fragment() {
 
                 return true
             }
+
             override fun onPrepareActionMode(mode: ActionMode, menu: Menu): Boolean {
                 return false
             }
@@ -106,18 +121,14 @@ class FavouriteEnglishFragment : Fragment() {
 
                     R.id.copy -> {
 
-                        if (!expanded) {
-                            val label = "copy"
-                            val clipboard = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                            val clip = ClipData.newPlainText(label, copyText)
-                            clipboard.primaryClip = clip
-                            mode.finish()
+                        val label = "copy"
+                        val clipboard = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val clip = ClipData.newPlainText(label, copyText)
+                        clipboard.primaryClip = clip
+                        mode.finish()
 
-                            Toast.makeText(activity, "$copyText copied to clipboard", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(activity, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, "$copyText copied to clipboard", Toast.LENGTH_SHORT).show()
 
-                        }
                         return true
                     }
 
@@ -147,35 +158,30 @@ class FavouriteEnglishFragment : Fragment() {
                         val alertDialogBuilder = AlertDialog.Builder(activity)
                         alertDialogBuilder.setMessage("Are you sure,You wanted to delete this item")
                         alertDialogBuilder.setPositiveButton("yes") { arg0, arg1 ->
-                            //                        // Calls getSelectedIds method from ListViewAdapter Class
+                            // Calls getSelectedIds method from ListViewAdapter Class
 
-                            //                        // Captures all selected ids with a loop
+                            // Captures all selected ids with a loop
                             for (i in selected!!.size() - 1 downTo 0) {
 
                                 val databaseHelper = DatabaseHelper(requireContext())
-                                if (!expanded) {
-                                    if (selected.valueAt(i)) {
-                                        try {
-                                            val favouriteItem = listAdapter.getGroup(selected.keyAt(i)) as FavouriteItem
+                                if (selected.valueAt(i)) {
+                                    try {
+                                        val favouriteItem = listAdapter.getGroup(selected.keyAt(i)) as FavouriteItem
 
-                                            // Re/move selected items following the ids
+                                        // Re/move selected items following the ids
 
-                                            listAdapter.remove(favouriteItem)
+                                        listAdapter.remove(favouriteItem)
 
 
-                                            val cursor = databaseHelper.writableDatabase.rawQuery("delete From samasya_eng_favourite where ENG like '" + favouriteItem.name + "'", null)
-                                            cursor.moveToFirst()
-                                            while (!cursor.isAfterLast) {
-                                                cursor.moveToNext()
-                                            }
-                                            cursor.close()
-                                        } catch (sqle: Exception) {
-                                            throw sqle
+                                        val cursor = databaseHelper.writableDatabase.rawQuery("delete From samasya_eng_favourite where ENG like '" + favouriteItem.name + "'", null)
+                                        cursor.moveToFirst()
+                                        while (!cursor.isAfterLast) {
+                                            cursor.moveToNext()
                                         }
-
+                                        cursor.close()
+                                    } catch (sqle: Exception) {
+                                        throw sqle
                                     }
-                                } else {
-                                    Toast.makeText(activity, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
 
                                 }
                             }

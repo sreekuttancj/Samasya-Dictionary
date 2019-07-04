@@ -2,11 +2,12 @@ package malayalamdictionary.samasya
 
 import android.app.AlertDialog
 import android.app.ProgressDialog
-import android.content.DialogInterface
 import android.database.SQLException
 import android.graphics.Point
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
+import android.util.SparseBooleanArray
 import android.view.*
 import android.widget.AbsListView
 import android.widget.ExpandableListView
@@ -16,8 +17,7 @@ import androidx.fragment.app.Fragment
 import malayalamdictionary.samasya.adapter.HistoryAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
 import malayalamdictionary.samasya.helper.HistoryItems
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 
 class HistoryMalayalamFragment : Fragment() {
 
@@ -33,6 +33,7 @@ class HistoryMalayalamFragment : Fragment() {
     private lateinit var copyText: String
     private lateinit var progress: ProgressDialog
     private lateinit var historyTask: HistoryTask
+    private lateinit var expandedItem: SparseBooleanArray
     var expanded = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,6 +43,7 @@ class HistoryMalayalamFragment : Fragment() {
         expListView = rowView.findViewById(R.id.lvExp_history)
         listDataHeader = ArrayList()
         listDataChild = HashMap()
+        expandedItem = SparseBooleanArray()
 
         val display = activity?.windowManager?.defaultDisplay
         val size = Point()
@@ -57,6 +59,12 @@ class HistoryMalayalamFragment : Fragment() {
 
         expListView.setOnGroupClickListener { expandableListView, view, i, l ->
             expanded = !expandableListView.isGroupExpanded(i)
+            if (!actionModeEnabled && expanded) {
+                expandedItem.put(i, expanded)
+            }
+            if (!expanded && expandedItem[i]) {
+                expandedItem.delete(i)
+            }
             if (actionModeEnabled) {
                 expandableListView.setItemChecked(i, !expandableListView.isItemChecked(i))
             }
@@ -67,7 +75,6 @@ class HistoryMalayalamFragment : Fragment() {
             override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
 
                 when (item?.itemId) {
-
 
                     R.id.select_all -> {
                         selectAll = if (selectAll) {
@@ -95,35 +102,30 @@ class HistoryMalayalamFragment : Fragment() {
                         val alertDialogBuilder = AlertDialog.Builder(activity)
                         alertDialogBuilder.setMessage("Are you sure,You wanted to delete this item")
                         alertDialogBuilder.setPositiveButton("yes") { arg0, arg1 ->
-                                                    // Calls getSelectedIds method from ListViewAdapter Class
+                            // Calls getSelectedIds method from ListViewAdapter Class
 
-                                                    // Captures all selected ids with a loop
+                            // Captures all selected ids with a loop
                             for (i in selected.size() - 1 downTo 0) {
 
                                 val databaseHelper = DatabaseHelper(requireContext())
 
-                                if (!expanded) {
-                                    if (selected.valueAt(i)) {
+                                if (selected.valueAt(i)) {
 
-                                        val historyItems = listAdapter.getGroup(selected.keyAt(i)) as HistoryItems
+                                    val historyItems = listAdapter.getGroup(selected.keyAt(i)) as HistoryItems
 
 
-                                        listAdapter.remove(historyItems)
+                                    listAdapter.remove(historyItems)
 
-                                        try {
-                                            val cursor = databaseHelper.writableDatabase.rawQuery("delete From samasya_mal_history where MAL like '" + historyItems.name + "'", null)
-                                            cursor.moveToFirst()
-                                            while (!cursor.isAfterLast) {
-                                                cursor.moveToNext()
-                                            }
-                                            cursor.close()
-                                        } catch (sqle: SQLException) {
-                                            throw sqle
+                                    try {
+                                        val cursor = databaseHelper.writableDatabase.rawQuery("delete From samasya_mal_history where MAL like '" + historyItems.name + "'", null)
+                                        cursor.moveToFirst()
+                                        while (!cursor.isAfterLast) {
+                                            cursor.moveToNext()
                                         }
-
+                                        cursor.close()
+                                    } catch (sqle: SQLException) {
+                                        throw sqle
                                     }
-                                } else {
-                                    Toast.makeText(activity, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
 
                                 }
                             }
@@ -139,26 +141,35 @@ class HistoryMalayalamFragment : Fragment() {
                         return true
                     }
                     else -> return false
-                }            }
+                }
+            }
 
-            override fun onItemCheckedStateChanged(mode: ActionMode?, position: Int, id: Long, checked: Boolean) {
-                val checkedCount = expListView.checkedItemCount
-                mode?.setTitle(checkedCount.toString())
-                listAdapter.toggleSelection(position)
-                val selected = listAdapter.getSelectedIds()
+            override fun onItemCheckedStateChanged(mode: ActionMode, position: Int, id: Long, checked: Boolean) {
+                if (expandedItem.size() == 0) {
+                    val checkedCount = expListView.checkedItemCount
+                    mode.title = checkedCount.toString()
+                    listAdapter.toggleSelection(position)
+                    val selected = listAdapter.getSelectedIds()
 
-                if (checkedCount > 1) {
-                    menuItem.isVisible = false
-                } else {
+                    if (checkedCount > 1) {
+                        menuItem.isVisible = false
+                    } else {
 
-                    if (selected.valueAt(0)) {
-                        copyText = listAdapter.getGroupItem(selected.keyAt(0)).toString()
+                        if (selected.valueAt(0)) {
+                            copyText = listAdapter.getGroupItem(selected.keyAt(0)).toString()
 
+                        }
                     }
 
-                }
+                    selectAll = checkedCount != listAdapter.groupCount
+                } else {
+                    //if any of the item is expanded then refresh the adapter
+                    Log.d("check_login", "iam else")
 
-                selectAll = checkedCount != listAdapter.groupCount
+                    Toast.makeText(activity, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
+                    expandedItem.clear()
+                    expListView.setAdapter(listAdapter)
+                }
             }
 
             override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
@@ -177,7 +188,8 @@ class HistoryMalayalamFragment : Fragment() {
 
             override fun onDestroyActionMode(p0: ActionMode?) {
                 listAdapter.removeSelection()
-                actionModeEnabled = false            }
+                actionModeEnabled = false
+            }
 
         })
 
@@ -237,6 +249,7 @@ class HistoryMalayalamFragment : Fragment() {
 
         return meaningArray
     }
+
     private fun getDipsFromPixel(pixels: Float): Int {
         // Get the screen's density scale
         val scale = resources.displayMetrics.density

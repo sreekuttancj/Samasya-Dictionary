@@ -9,6 +9,8 @@ import android.database.SQLException
 import android.graphics.Point
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
+import android.util.SparseBooleanArray
 import android.view.*
 import android.widget.AbsListView
 import android.widget.ExpandableListView
@@ -34,6 +36,7 @@ class HistoryEnglishFragment : Fragment() {
     private lateinit var copyText: String
     private lateinit var progress: ProgressDialog
     private lateinit var historyTask: HistoryTask
+    private lateinit var expandedItem: SparseBooleanArray
     var expanded = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -42,6 +45,7 @@ class HistoryEnglishFragment : Fragment() {
         expListView = rowView.findViewById(R.id.lvExp_history)
         listDataHeader = ArrayList()
         listDataChild = HashMap()
+        expandedItem = SparseBooleanArray()
 
         val display: Display? = activity?.windowManager?.defaultDisplay
         val size = Point()
@@ -55,37 +59,51 @@ class HistoryEnglishFragment : Fragment() {
 
         expListView.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
 
+
         expListView.setOnGroupClickListener { expandableListView, view, i, l ->
             expanded = !expandableListView.isGroupExpanded(i)
+            if (!actionModeEnabled && expanded) {
+                expandedItem.put(i, expanded)
+            }
+            if (!expanded && expandedItem[i]) {
+                expandedItem.delete(i)
+            }
+
             if (actionModeEnabled) {
                 expandableListView.setItemChecked(i, !expandableListView.isItemChecked(i))
             }
-
             actionModeEnabled
         }
 
 
         expListView.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener {
-            override fun onItemCheckedStateChanged(mode: ActionMode, position: Int, id: Long, checked: Boolean) {
-                val checkedCount = expListView.checkedItemCount
-                mode.title = checkedCount.toString()
-                listAdapter.toggleSelection(position)
-                val selected = listAdapter.getSelectedIds()
 
-                if (checkedCount > 1) {
-                    menuItem.isVisible = false
+            override fun onItemCheckedStateChanged(mode: ActionMode, position: Int, id: Long, checked: Boolean) {
+                if (expandedItem.size() == 0) {
+                    val checkedCount = expListView.checkedItemCount
+                    mode.title = checkedCount.toString()
+                    listAdapter.toggleSelection(position)
+                    val selected = listAdapter.getSelectedIds()
+
+                    if (checkedCount > 1) {
+                        menuItem.isVisible = false
+                    } else {
+                        if (selected.valueAt(0)) {
+                            copyText = listAdapter.getGroupItem(selected.keyAt(0)).toString()
+                        }
+                        menuItem.isVisible = true
+                    }
+                    selectAll = checkedCount != listAdapter.groupCount
+                    Log.d("check_login", "iam in")
                 } else {
 
-                    if (selected.valueAt(0)) {
-                        copyText = listAdapter.getGroupItem(selected.keyAt(0)).toString()
+                    //if any of the item is expanded then refresh the adapter
+                    Log.d("check_login", "iam else")
 
-                    }
-
-                    menuItem.isVisible = true
-
+                    Toast.makeText(activity, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
+                    expandedItem.clear()
+                    expListView.setAdapter(listAdapter)
                 }
-
-                selectAll = checkedCount != listAdapter.groupCount
             }
 
             override fun onCreateActionMode(mode: ActionMode, menu: Menu): Boolean {
@@ -103,32 +121,27 @@ class HistoryEnglishFragment : Fragment() {
 
             override fun onActionItemClicked(mode: ActionMode, item: MenuItem): Boolean {
 
-
                 when (item.itemId) {
 
                     R.id.copy -> {
-                        if (!expanded) {
-                            val label = "copy"
-                            val clipboard = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                            val clip = ClipData.newPlainText(label, copyText)
-                            clipboard.primaryClip = clip
-                            mode.finish()
-                            Toast.makeText(activity, "$copyText copied to clipboard", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(activity, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
+                        val label = "copy"
+                        val clipboard = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        val clip = ClipData.newPlainText(label, copyText)
+                        clipboard.primaryClip = clip
+                        mode.finish()
+                        Toast.makeText(activity, "$copyText copied to clipboard", Toast.LENGTH_SHORT).show()
 
-                        }
                         return true
                     }
 
 
                     R.id.select_all -> {
-                        if (selectAll) {
+                        selectAll = if (selectAll) {
                             for (i in 0 until expListView.adapter.count) {
                                 expListView.setItemChecked(i, true)
                                 listAdapter.selectView(i, true)
                             }
-                            selectAll = false
+                            false
 
                         } else {
                             for (i in 0 until expListView.adapter.count) {
@@ -136,7 +149,7 @@ class HistoryEnglishFragment : Fragment() {
                                 expListView.setItemChecked(i, false)
                                 listAdapter.selectView(i, false)
                             }
-                            selectAll = true
+                            true
                         }
 
                         return true
@@ -148,37 +161,31 @@ class HistoryEnglishFragment : Fragment() {
                         val alertDialogBuilder = AlertDialog.Builder(activity)
                         alertDialogBuilder.setMessage("Are you sure,You wanted to delete this item")
                         alertDialogBuilder.setPositiveButton("yes") { arg0, arg1 ->
-                            //                        // Calls getSelectedIds method from ListViewAdapter Class
+                            // Calls getSelectedIds method from ListViewAdapter Class
 
-                            //                        // Captures all selected ids with a loop
+                            // Captures all selected ids with a loop
                             for (i in selected.size() - 1 downTo 0) {
 
                                 val databaseHelper = DatabaseHelper(requireContext())
                                 if (selected.valueAt(i)) {
 
-                                    if (!expanded) {
+                                    val historyItems = listAdapter.getGroup(selected.keyAt(i)) as HistoryItems
 
-                                        val historyItems = listAdapter.getGroup(selected.keyAt(i)) as HistoryItems
+                                    listAdapter.remove(historyItems)
 
-
-                                        listAdapter.remove(historyItems)
-
-                                        try {
-                                            val cursor = databaseHelper.writableDatabase.rawQuery("delete From samasya_eng_history where ENG like '" + historyItems.name + "'", null)
-                                            cursor.moveToFirst()
-                                            while (!cursor.isAfterLast) {
-                                                cursor.moveToNext()
-                                            }
-                                            cursor.close()
-                                        } catch (sqle: SQLException) {
-                                            throw sqle
+                                    try {
+                                        val cursor = databaseHelper.writableDatabase.rawQuery("delete From samasya_eng_history where ENG like '" + historyItems.name + "'", null)
+                                        cursor.moveToFirst()
+                                        while (!cursor.isAfterLast) {
+                                            cursor.moveToNext()
                                         }
-
+                                        cursor.close()
+                                    } catch (sqle: SQLException) {
+                                        throw sqle
                                     }
-                                } else {
-                                    Toast.makeText(activity, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
 
                                 }
+
                             }
                         }
 
@@ -197,7 +204,6 @@ class HistoryEnglishFragment : Fragment() {
 
 
             override fun onDestroyActionMode(mode: ActionMode) {
-                //                toolbar.setVisibility(View.VISIBLE);
                 listAdapter.removeSelection()
                 actionModeEnabled = false
 
@@ -216,7 +222,7 @@ class HistoryEnglishFragment : Fragment() {
     }
 
 
-    fun getDataFromDb() {
+    private fun getDataFromDb() {
 
         val myDbHelper2 = DatabaseHelper(requireContext())
         try {
@@ -236,7 +242,7 @@ class HistoryEnglishFragment : Fragment() {
 
     }
 
-    fun getMeaningFromDb(word: String?): ArrayList<String> {
+    private fun getMeaningFromDb(word: String?): ArrayList<String> {
 
         val myDbHelper2 = DatabaseHelper(requireContext())
         try {

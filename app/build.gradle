@@ -32,7 +32,6 @@ dependencies {
     compile 'com.roughike:bottom-bar:1.4.0.1'
     compile 'com.google.firebase:firebase-core:17.0.0'
     compile 'com.google.firebase:firebase-database:18.0.0'
-//    implementation 'com.google.android.gms:play-services-ads:18.0.0'
     compile 'io.github.kobakei:ratethisapp:1.0.5'
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 

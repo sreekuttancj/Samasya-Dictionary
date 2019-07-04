@@ -44,7 +44,10 @@ class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME
         db_Read.close()
         try {
             if (!check) {
+                Log.e("db_check","db not present copy db")
                 copyDataBase()
+            }else{
+                Log.e("db_check","db present")
             }
 
         } catch (e: Exception) {

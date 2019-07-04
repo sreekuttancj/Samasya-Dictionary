@@ -10,14 +10,15 @@ import android.widget.BaseExpandableListAdapter
 import android.widget.TextView
 import android.widget.Toast
 import malayalamdictionary.samasya.helper.HistoryItems
+import java.util.ArrayList
 
 
 class HistoryAdapter(context: Context,listDataHeader:MutableList<HistoryItems>,
                      listChildData: HashMap<String, List<String>>,englishMalayalam : Boolean) : BaseExpandableListAdapter() {
 
     private val mContext:Context=context
-    private val listDataHeader: MutableList<HistoryItems> =listDataHeader
-    private val listChildData: HashMap<String, List<String>> = listChildData;
+    private var listDataHeader: MutableList<HistoryItems> =listDataHeader
+    private val listChildData: HashMap<String, List<String>> = listChildData
     private var englishMalayalam: Boolean= englishMalayalam
     private var mSelectedItemsIds: SparseBooleanArray = SparseBooleanArray()
 
@@ -44,7 +45,7 @@ class HistoryAdapter(context: Context,listDataHeader:MutableList<HistoryItems>,
 
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
-        return true
+        return false
     }
 
     override fun hasStableIds(): Boolean {
@@ -146,5 +147,5 @@ class HistoryAdapter(context: Context,listDataHeader:MutableList<HistoryItems>,
     fun toggleSelection(position: Int) {
         selectView(position, !mSelectedItemsIds.get(position))
     }
-
+ 
 }

@@ -14,11 +14,11 @@
             android:id="@+id/history"
             android:icon="@drawable/nav_his"
             android:title="@string/history" />
-        <item
-            android:id="@+id/block_add"
-            android:title="@string/block_add"
-            android:icon="@drawable/block_ad"
-            />
+        <!--<item-->
+            <!--android:id="@+id/block_add"-->
+            <!--android:title="@string/block_add"-->
+            <!--android:icon="@drawable/block_ad"-->
+            <!--/>-->
         <item
             android:id="@+id/google_translate"
             android:title="@string/google_translate"

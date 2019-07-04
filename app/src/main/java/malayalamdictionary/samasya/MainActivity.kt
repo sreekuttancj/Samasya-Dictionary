@@ -24,6 +24,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.bottomappbar.BottomAppBar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -52,15 +54,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var cardViewList: CardView
     lateinit var cardViewListBack: CardView
     lateinit var listViewSuggestion: ListView
-    lateinit  var listViewSuggestionMalayalam: ListView
+    lateinit var listViewSuggestionMalayalam: ListView
     lateinit var listItemAdapter: ListItemAdapter
     lateinit var cardViewListMeaning: CardView
     lateinit var cardViewListMeaningBack: CardView
-    lateinit  var listViewMeaning: ListView
-    lateinit  var listViewMeaningMalayalam: ListView
-    lateinit  var meaningAdapter: MeaningAdapter
-    lateinit  var textToSpeech: TextToSpeech
-    lateinit  var textViewHint: TextView
+    lateinit var listViewMeaning: ListView
+    lateinit var listViewMeaningMalayalam: ListView
+    lateinit var meaningAdapter: MeaningAdapter
+    lateinit var textToSpeech: TextToSpeech
+    lateinit var textViewHint: TextView
 
     val REQ_CODE_SPEECH_INPUT = 1
     private lateinit var drawerLayout: DrawerLayout
@@ -77,33 +79,33 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     internal lateinit var floatingActionButton: FloatingActionButton
     private lateinit var type: Typeface
     private lateinit var typeButton: Typeface
-    lateinit  var pref: SharedPreferences
+    lateinit var pref: SharedPreferences
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
 
     lateinit var relayoutFirstPage: RelativeLayout
     lateinit var relayoutSecondPage: RelativeLayout
-    lateinit  var relativeLayoutTopbar: RelativeLayout
-    lateinit  var symLetters: Array<String>
+    lateinit var relativeLayoutTopbar: RelativeLayout
+    lateinit var symLetters: Array<String>
     lateinit var consLetters: Array<String>
     lateinit var vowLetters: Array<String>
     lateinit var chilluLetters: Array<String>
     var isShowKeyboard: Boolean = false
     var charIndex: Int = 0
-    private lateinit  var text: String
+    private lateinit var text: String
     var cursorPossition: Int = 0
     var isConsonants: Int = 0
     var isChillu: Int = 0
-    lateinit  var typedWord: String
+    lateinit var typedWord: String
     var longPressed: Boolean = false
 
-    lateinit  var backspace: ImageButton
-    lateinit  var buttonSpace: ImageButton
-    lateinit  var imageButtonSearch: ImageButton
-    lateinit  var relativeLayoutFeedback: RelativeLayout
-    lateinit  var textViewFeedbackWord: TextView
-    lateinit  var buttonFeedback: Button
-    lateinit  var buttonGoogleTranslator: Button
+    lateinit var backspace: ImageButton
+    lateinit var buttonSpace: ImageButton
+    lateinit var imageButtonSearch: ImageButton
+    lateinit var relativeLayoutFeedback: RelativeLayout
+    lateinit var textViewFeedbackWord: TextView
+    lateinit var buttonFeedback: Button
+    lateinit var buttonGoogleTranslator: Button
     var doubleBackToExitPressedOnce = false
     var isInternetPresent: Boolean = false
     lateinit var databaseHelper: DatabaseHelper
@@ -232,8 +234,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         })
 
 
-        mBottomBar = BottomBar.attach(this, savedInstanceState)
 
+        mBottomBar= BottomBar.attach(this, savedInstanceState)
         mBottomBar.setItemsFromMenu(R.menu.menu_bottom,
                 OnMenuTabSelectedListener { })
 
@@ -387,6 +389,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setViews()
 
     }
+
     private fun toggleChilluButton() {
         val togChilluButton = findViewById<Button>(R.id.chilluButton)
         if (this.isChillu == 0) {
@@ -542,6 +545,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
     }
+
     private fun MyStartActivity(aIntent: Intent): Boolean {
         try {
 
@@ -552,6 +556,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
     }
+
     private fun initNavigationDrawer() {
         navigationView = findViewById(R.id.navigation_view)
         navigationView.itemIconTintList = null
@@ -576,12 +581,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     drawerLayout.closeDrawers()
                     drawerLayout.closeDrawers()
                 }
-                R.id.block_add -> {
-
-                    val intentAdBlock = Intent(this@MainActivity, AdblockActivity::class.java)
-                    startActivity(intentAdBlock)
-                    drawerLayout.closeDrawers()
-                }
+//                R.id.block_add -> {
+//
+//                    val intentAdBlock = Intent(this@MainActivity, AdblockActivity::class.java)
+//                    startActivity(intentAdBlock)
+//                    drawerLayout.closeDrawers()
+//                }
                 R.id.google_translate -> {
                     val intentTranslate = Intent(this@MainActivity, GoogleTranslateActivity::class.java)
                     startActivity(intentTranslate)
@@ -626,6 +631,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         actionBarDrawerToggle.syncState()
 
     }
+
     private fun rebuildDatabase() {
 
 
@@ -637,6 +643,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
     }
+
     private fun textChange() {
         autoCompleteTextView.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -689,10 +696,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                     imageButtonClear.visibility = View.VISIBLE
                     imageButtonMic.visibility = View.GONE
-                    floatingActionButton.visibility=View.GONE
+                    floatingActionButton.visibility = View.GONE
                 } else {
 
-                    floatingActionButton.visibility=View.VISIBLE
+                    floatingActionButton.visibility = View.VISIBLE
                     if (Common.englishToMayalayam) {
                         imageButtonMic.visibility = View.VISIBLE
                     }
@@ -703,11 +710,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     mBottomBar.hide()
                 }
             }
+
             override fun afterTextChanged(s: Editable) {
 
             }
         })
     }
+
     fun getWords() {
 
         val myDbHelper2 = DatabaseHelper(this)
@@ -738,6 +747,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
     }
+
     fun getWordsMalayalam() {
         val myDbHelper2 = DatabaseHelper(this)
         try {
@@ -765,6 +775,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
     }
+
     fun setText(text: String) {
         autoCompleteTextView.setText(text)
     }
@@ -803,6 +814,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
 
     }
+
     fun fillData(text: String?) {
 
         if (text != null) {
@@ -819,7 +831,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         imageButtonMic.visibility = View.GONE
         imageButtonSearch.visibility = View.GONE
-        floatingActionButton.visibility=View.GONE
+        floatingActionButton.visibility = View.GONE
 
         hideKey()
         val myDbHelper1 = DatabaseHelper(this)
@@ -839,7 +851,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             }
 
-            val strings =ArrayList<String>()
+            val strings = ArrayList<String>()
             c1!!.moveToFirst()
             if (Common.englishToMayalayam) {
                 while (!c1.isAfterLast) {
@@ -953,7 +965,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     if (favourite.length > REQ_CODE_SPEECH_INPUT) {
 
 
-                        var c444: Cursor? = null
+                        val c444: Cursor?
                         if (Common.englishToMayalayam) {
                             c444 = databaseHelper.writableDatabase.rawQuery("INSERT INTO samasya_eng_favourite (ENG) values('" + favourite.replace("'", "''") + "')", null)
                             Toast.makeText(this, "$favourite added to favourites", Toast.LENGTH_SHORT).show()
@@ -988,9 +1000,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     override fun onClick(v: View) {
 
         if (v.id == R.id.autoCompleteTextView) {
-
             //            adView.setVisibility(View.GONE);
             mBottomBar.hide()
+
             if (!Common.englishToMayalayam) {
                 showKeyboard()
                 hideKey()
@@ -1100,6 +1112,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             i2 += 1
         }
     }
+
     private fun setChilluButtons() {
         val BUTTON_IDS = intArrayOf(R.id.chilluButton1, R.id.chilluButton2, R.id.chilluButton3, R.id.chilluButton4, R.id.chilluButton5)
         var i = 0
