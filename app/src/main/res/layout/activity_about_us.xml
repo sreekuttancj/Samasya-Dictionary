@@ -1,209 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:id="@+id/toolbar"
         android:background="@android:color/white">
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
 
-    <FrameLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    <FrameLayout
         android:id="@+id/frame_shadow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/toolbar">
 
-        <!-- **** Place Your Content Here **** -->
-
-        <View android:layout_width="match_parent"
+        <View
+            android:layout_width="match_parent"
             android:layout_height="5dp"
-            android:background="@drawable/shape"/>
+            android:background="@drawable/shape" />
 
     </FrameLayout>
-
-
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/frame_shadow"
-        >
+        android:layout_below="@+id/frame_shadow">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        >
-
-    <ImageView
-        android:layout_width="128dp"
-        android:layout_height="128dp"
-        android:id="@+id/imageViweLogo"
-        android:src="@mipmap/ic_launcher"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"/>
-
-    <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-        android:id="@+id/textViewAppVersion"
-        android:text="@string/app_version"
-        android:layout_below="@+id/imageViweLogo"
-        android:layout_centerHorizontal="true"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        />
-
-    <View
-        android:id="@+id/SplitLine_hor1"
-        android:layout_width="match_parent"
-        android:layout_height= "1dp"
-        android:background="@android:color/darker_gray"
-        android:layout_below="@+id/textViewAppVersion"
-        android:layout_marginTop="10dp"/>
-
-    <RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:id="@+id/relayoutLikeUs"
-        android:layout_below="@+id/SplitLine_hor1"
-        android:background="@drawable/suggestion_click"
-        >
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:id="@+id/imageViewFacebook"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/facebook"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"
-            android:layout_centerVertical="true"/>
-        <TextView
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewFacebook"
-            android:text="@string/btn_like_us"
-            android:textColor="@android:color/black"
-            android:padding="15dp"
-            android:gravity="center"
-            android:layout_toRightOf="@+id/imageViewFacebook"
-            android:layout_toEndOf="@+id/imageViewFacebook"
-            android:layout_centerVertical="true"
-            />
-
-        <View
-            android:id="@+id/SplitLine_hor2"
-            android:layout_width="match_parent"
-            android:layout_height= "1dp"
-            android:background="@android:color/darker_gray"
-            android:layout_below="@+id/textViewFacebook"
-            android:layout_toRightOf="@+id/imageViewFacebook"
-            android:layout_toEndOf="@+id/imageViewFacebook"
-            android:layout_marginTop="10dp"/>
-
-</RelativeLayout>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/relayoutLikeUs_plus"
-            android:layout_below="@+id/relayoutLikeUs"
-            android:background="@drawable/suggestion_click"
-            >
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:id="@+id/imageViewPlus"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:src="@drawable/google_plus"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_centerVertical="true"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textViewPlus"
-                android:text="@string/btn_like_us_plus"
-                android:textColor="@android:color/black"
-                android:padding="15dp"
-                android:gravity="center"
-                android:layout_toRightOf="@+id/imageViewPlus"
-                android:layout_toEndOf="@+id/imageViewPlus"
-                android:layout_centerVertical="true"
-                />
-
-            <View
-                android:id="@+id/SplitLine_hor3"
-                android:layout_width="match_parent"
-                android:layout_height= "1dp"
-                android:background="@android:color/darker_gray"
-                android:layout_below="@+id/textViewPlus"
-                android:layout_toRightOf="@+id/imageViewPlus"
-                android:layout_toEndOf="@+id/imageViewPlus"
-                android:layout_marginTop="10dp"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/relayoutWhatsApp"
-            android:layout_below="@+id/relayoutLikeUs_plus"
-            android:background="@drawable/suggestion_click"
 
             >
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:id="@+id/imageViewWhatsApp"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:src="@drawable/whatsapp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginStart="10dp"
-                android:layout_centerVertical="true"/>
+                android:id="@+id/imageViweLogo"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:src="@mipmap/ic_launcher" />
 
             <TextView
+                android:id="@+id/textViewAppVersion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textViewWhatsApp"
-                android:text="@string/btn_whats_app"
+                android:layout_below="@+id/imageViweLogo"
+                android:layout_centerHorizontal="true"
+                android:text="@string/app_version"
                 android:textColor="@android:color/black"
-                android:layout_toRightOf="@+id/imageViewWhatsApp"
-                android:layout_toEndOf="@+id/imageViewWhatsApp"
-                android:layout_centerVertical="true"
-                android:padding="15dp"
-                android:gravity="center"
-
-                />
-
-
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <View
-                android:id="@+id/SplitLine_hor6"
+                android:id="@+id/SplitLine_hor1"
                 android:layout_width="match_parent"
-                android:layout_height= "1dp"
-                android:background="@android:color/darker_gray"
-                android:layout_below="@+id/textViewWhatsApp"
-                android:layout_marginTop="10dp"/>
+                android:layout_height="1dp"
+                android:layout_below="@+id/textViewAppVersion"
+                android:layout_marginTop="10dp"
+                android:background="@android:color/darker_gray" />
 
+            <RelativeLayout
+                android:id="@+id/relayoutLikeUs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/SplitLine_hor1"
+                android:background="@drawable/suggestion_click">
+
+                <ImageView
+                    android:id="@+id/imageViewFacebook"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/facebook" />
+
+                <TextView
+                    android:id="@+id/textViewFacebook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/imageViewFacebook"
+                    android:layout_toRightOf="@+id/imageViewFacebook"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="@string/btn_like_us"
+                    android:textColor="@android:color/black" />
+
+                <View
+                    android:id="@+id/SplitLine_hor2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/textViewFacebook"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/imageViewFacebook"
+                    android:layout_toRightOf="@+id/imageViewFacebook"
+                    android:background="@android:color/darker_gray" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/relayoutWhatsApp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/relayoutLikeUs"
+                android:background="@drawable/suggestion_click"
+
+                >
+
+                <ImageView
+                    android:id="@+id/imageViewWhatsApp"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:src="@drawable/whatsapp" />
+
+                <TextView
+                    android:id="@+id/textViewWhatsApp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/imageViewWhatsApp"
+                    android:layout_toRightOf="@+id/imageViewWhatsApp"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:text="@string/btn_whats_app"
+                    android:textColor="@android:color/black"
+
+                    />
+
+                <View
+                    android:id="@+id/SplitLine_hor6"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/textViewWhatsApp"
+                    android:layout_marginTop="10dp"
+                    android:background="@android:color/darker_gray" />
+
+
+            </RelativeLayout>
 
         </RelativeLayout>
-
-</RelativeLayout>
     </ScrollView>
 
 </RelativeLayout>
