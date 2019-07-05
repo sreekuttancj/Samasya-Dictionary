@@ -180,7 +180,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 if (Common.englishToMayalayam) {
                     myRef.child(textViewFeedbackWord.text.toString().trim { it <= ' ' }).setValue(textViewFeedbackWord.text.toString().trim { it <= ' ' })
                 } else {
-                    //                        myRef1.child(textViewFeedbackWord.getText().toString().trim()).setValue(textViewFeedbackWord.getText().toString().trim());
+                  // myRef1.child(textViewFeedbackWord.getText().toString().trim()).setValue(textViewFeedbackWord.getText().toString().trim());
 
                 }
                 Toast.makeText(applicationContext, "Thank you for your suggestion, we will update it soon", Toast.LENGTH_LONG).show()

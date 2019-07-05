@@ -23,7 +23,6 @@ import malayalamdictionary.samasya.helper.HistoryItems
 import java.util.*
 
 class HistoryEnglishFragment : Fragment() {
-    //todo history deletion bug,check favorite deletion also
     private lateinit var listAdapter: HistoryAdapter
     private lateinit var expListView: ExpandableListView
     private lateinit var listDataHeader: MutableList<HistoryItems>
