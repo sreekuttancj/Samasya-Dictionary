@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.DrawerLayout xmlns:tools="http://schemas.android.com/tools"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -15,7 +15,7 @@
          android:background="#EEEEEE"
         >
 
-       <android.support.design.widget.CoordinatorLayout
+       <androidx.coordinatorlayout.widget.CoordinatorLayout
            android:layout_width="match_parent"
            android:layout_height="match_parent"
            android:id="@+id/cord_top">
@@ -29,7 +29,7 @@
 
 
 
-        <android.support.v7.widget.CardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:id="@+id/card_view_toolbar"
@@ -38,7 +38,7 @@
             app:cardPreventCornerOverlap="false"
 
             >
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_gravity="center"
@@ -105,13 +105,13 @@
             android:layout_marginTop="13dp"
             android:textSize="@dimen/hint"/>
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
        </RelativeLayout>
-           <android.support.design.widget.FloatingActionButton
+           <com.google.android.material.floatingactionbutton.FloatingActionButton
                android:id="@+id/fab_swip"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
@@ -123,17 +123,18 @@
                android:layout_margin="16dp"
                android:onClick="onCardClick"
                app:rippleColor="#FFF" />
-       </android.support.design.widget.CoordinatorLayout>
+       </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-       <com.google.android.gms.ads.NativeExpressAdView
-           android:id="@+id/adView_native"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           ads:adUnitId="@string/ad_unit_id"
-           android:layout_centerVertical="true"
-           android:layout_centerHorizontal="true"
-           ads:adSize="320x150">
-       </com.google.android.gms.ads.NativeExpressAdView>
+       <!--Ad unit-->
+       <!--<com.google.android.gms.ads.NativeExpressAdView-->
+           <!--android:id="@+id/adView_native"-->
+           <!--android:layout_width="wrap_content"-->
+           <!--android:layout_height="wrap_content"-->
+           <!--ads:adUnitId="@string/ad_unit_id"-->
+           <!--android:layout_centerVertical="true"-->
+           <!--android:layout_centerHorizontal="true"-->
+           <!--ads:adSize="320x150">-->
+       <!--</com.google.android.gms.ads.NativeExpressAdView>-->
 
 
        <RelativeLayout
@@ -144,7 +145,7 @@
 
 
     <!--</FrameLayout>-->
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_view_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -157,9 +158,9 @@
         >
 
     </ListView>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/card_view_list_meaning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -171,7 +172,7 @@
             android:id="@+id/list_view_meaning">
 
         </ListView>
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 
 </RelativeLayout>
@@ -186,7 +187,7 @@
            android:layout_marginTop="120dp"
            >
 
-           <android.support.v7.widget.CardView
+           <androidx.cardview.widget.CardView
                android:id="@+id/card_view_list_back"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
@@ -200,9 +201,9 @@
                    >
 
                </ListView>
-           </android.support.v7.widget.CardView>
+           </androidx.cardview.widget.CardView>
 
-           <android.support.v7.widget.CardView
+           <androidx.cardview.widget.CardView
                android:id="@+id/card_view_list_meaning_back"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
@@ -215,7 +216,7 @@
                    >
 
                </ListView>
-           </android.support.v7.widget.CardView>
+           </androidx.cardview.widget.CardView>
 
 
 
@@ -307,7 +308,7 @@
 
     </RelativeLayout>
 
-    <android.support.design.widget.NavigationView
+    <com.google.android.material.navigation.NavigationView
         android:id="@+id/navigation_view"
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
@@ -318,4 +319,4 @@
 
 
 
-</android.support.v4.widget.DrawerLayout>
+</androidx.drawerlayout.widget.DrawerLayout>
