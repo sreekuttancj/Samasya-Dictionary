@@ -35,6 +35,8 @@ import com.kobakei.ratethisapp.RateThisApp
 import com.roughike.bottombar.BottomBar
 import com.roughike.bottombar.OnMenuTabClickListener
 import com.roughike.bottombar.OnMenuTabSelectedListener
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.keyboad.*
 import malayalamdictionary.samasya.adapter.ListItemAdapter
 import malayalamdictionary.samasya.adapter.MeaningAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
@@ -48,44 +50,22 @@ import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
-    lateinit var autoCompleteTextView: AutoCompleteTextView
-    lateinit var imageButtonMic: ImageButton
-    lateinit var imageButtonClear: ImageButton
-    lateinit var cardViewList: CardView
-    lateinit var cardViewListBack: CardView
-    lateinit var listViewSuggestion: ListView
-    lateinit var listViewSuggestionMalayalam: ListView
-    lateinit var listItemAdapter: ListItemAdapter
-    lateinit var cardViewListMeaning: CardView
-    lateinit var cardViewListMeaningBack: CardView
-    lateinit var listViewMeaning: ListView
-    lateinit var listViewMeaningMalayalam: ListView
-    lateinit var meaningAdapter: MeaningAdapter
-    lateinit var textToSpeech: TextToSpeech
-    lateinit var textViewHint: TextView
+    private lateinit var listItemAdapter: ListItemAdapter
+    private lateinit var meaningAdapter: MeaningAdapter
+    private lateinit var textToSpeech: TextToSpeech
 
-    val REQ_CODE_SPEECH_INPUT = 1
-    private lateinit var drawerLayout: DrawerLayout
-    private lateinit var toolbar: Toolbar
-    lateinit var navigationView: NavigationView
-    lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
-
-    private lateinit var mBottomBar: BottomBar
+    private val REQ_CODE_SPEECH_INPUT = 1
+    private lateinit var actionBarDrawerToggle: ActionBarDrawerToggle
 
     //    NativeExpressAdView adView;
-    internal var fromFav = "null"
-    internal var fromHis = "null"
+    private var fromFav = "null"
+    private var fromHis = "null"
 
-    internal lateinit var floatingActionButton: FloatingActionButton
     private lateinit var type: Typeface
     private lateinit var typeButton: Typeface
     lateinit var pref: SharedPreferences
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
-
-    lateinit var relayoutFirstPage: RelativeLayout
-    lateinit var relayoutSecondPage: RelativeLayout
-    lateinit var relativeLayoutTopbar: RelativeLayout
     lateinit var symLetters: Array<String>
     lateinit var consLetters: Array<String>
     lateinit var vowLetters: Array<String>
@@ -99,13 +79,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var typedWord: String
     var longPressed: Boolean = false
 
-    lateinit var backspace: ImageButton
-    lateinit var buttonSpace: ImageButton
-    lateinit var imageButtonSearch: ImageButton
-    lateinit var relativeLayoutFeedback: RelativeLayout
-    lateinit var textViewFeedbackWord: TextView
-    lateinit var buttonFeedback: Button
-    lateinit var buttonGoogleTranslator: Button
     var doubleBackToExitPressedOnce = false
     var isInternetPresent: Boolean = false
     lateinit var databaseHelper: DatabaseHelper
@@ -125,7 +98,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         this.type = Typeface.createFromAsset(assets, "fonts/mal.ttf")
         typeButton = Typeface.createFromAsset(assets, "fonts/mlwttkarthika.ttf")
         this.isShowKeyboard = false
-        toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         val connectionDetector = ConnectionDetector(applicationContext)
@@ -137,24 +109,16 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //
 //            adView.loadAd(new AdRequest.Builder().build());
 //        }
-        relayoutFirstPage = findViewById(R.id.re_first)
-        relayoutSecondPage = findViewById(R.id.re_second)
-        floatingActionButton = findViewById(R.id.fab_swip)
-        relativeLayoutTopbar = findViewById(R.id.top_bar)
-        relativeLayoutFeedback = findViewById(R.id.relayout_feedback)
-        textViewFeedbackWord = findViewById(R.id.textView_word)
-        buttonFeedback = findViewById(R.id.buttonFeedBack)
-        buttonGoogleTranslator = findViewById(R.id.button_google_translate)
 
-        buttonGoogleTranslator.setOnClickListener {
+        button_google_translate.setOnClickListener {
             isInternetPresent = connectionDetector.isConnectingToInternet()
 
             if (isInternetPresent) {
                 val copyText = autoCompleteTextView.text.toString().trim { it <= ' ' }
                 val label = "copy"
-                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                var clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText(label, copyText)
-                clipboard.primaryClip = clip
+                clipboard.setPrimaryClip(clip)
 
                 if (Common.englishToMayalayam) {
                     Toast.makeText(applicationContext, "Word copied to clipboard Long press to paste it into translator", Toast.LENGTH_LONG).show()
@@ -167,28 +131,25 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val intentTranslate = Intent(this@MainActivity, GoogleTranslateActivity::class.java)
                 startActivity(intentTranslate)
             } else {
-                Snackbar.make(relativeLayoutFeedback, "No network connection", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(relayout_feedback, "No network connection", Snackbar.LENGTH_SHORT).show()
             }
         }
         databaseHelper = DatabaseHelper(this)
-        buttonFeedback.setOnClickListener {
+        buttonFeedBack.setOnClickListener {
             isInternetPresent = connectionDetector.isConnectingToInternet()
 
             if (isInternetPresent) {
                 hideKey()
                 hideMalayalam(R.id.keyBoardLayout)
                 if (Common.englishToMayalayam) {
-                    myRef.child(textViewFeedbackWord.text.toString().trim { it <= ' ' }).setValue(textViewFeedbackWord.text.toString().trim { it <= ' ' })
-                } else {
-                  // myRef1.child(textViewFeedbackWord.getText().toString().trim()).setValue(textViewFeedbackWord.getText().toString().trim());
-
+                    myRef.child(textView_word.text.toString().trim { it <= ' ' }).setValue(textView_word.text.toString().trim { it <= ' ' })
                 }
                 Toast.makeText(applicationContext, "Thank you for your suggestion, we will update it soon", Toast.LENGTH_LONG).show()
-                relativeLayoutFeedback.visibility = View.GONE
-                cardViewList.visibility = View.GONE
-                cardViewListBack.visibility = View.GONE
-                cardViewListMeaning.visibility = View.GONE
-                cardViewListMeaningBack.visibility = View.GONE
+                relayout_feedback.visibility = View.GONE
+                card_view_list.visibility = View.GONE
+                card_view_list_back.visibility = View.GONE
+                card_view_list_meaning.visibility = View.GONE
+                card_view_list_meaning_back.visibility = View.GONE
                 autoCompleteTextView.setText("")
 
             } else {
@@ -196,9 +157,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(applicationContext, "No internet connection", Toast.LENGTH_LONG).show()
             }
         }
-        imageButtonSearch = findViewById(R.id.search_word)
-        imageButtonSearch.setOnClickListener(this)
-        relayoutFirstPage.setOnTouchListener(object : OnSwipeTouchListener(this) {
+        search_word.setOnClickListener(this)
+        re_first.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeTop() {}
 
             override fun onSwipeRight() {
@@ -216,7 +176,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         })
 
-        relayoutSecondPage.setOnTouchListener(object : OnSwipeTouchListener(this) {
+        re_second.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeTop() {}
             override fun onSwipeRight() {
                 flipCard()
@@ -232,51 +192,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 return gestureDetector.onTouchEvent(event)
             }
         })
-
-
-
-        mBottomBar= BottomBar.attach(this, savedInstanceState)
-        mBottomBar.setItemsFromMenu(R.menu.menu_bottom,
-                OnMenuTabSelectedListener { })
-
-        mBottomBar.setOnMenuTabClickListener(object : OnMenuTabClickListener {
-            override fun onMenuTabSelected(@IdRes menuItemId: Int) {
-                when (menuItemId) {
-                    R.id.favorite_item -> updateFavourite()
-
-                    R.id.text_to_speech -> if (Common.englishToMayalayam) {
-                        speak()
-                    } else {
-                        Toast.makeText(applicationContext, "Pronunciation is not available for malayalam words", Toast.LENGTH_SHORT).show()
-                    }
-                    R.id.home -> {
-                    }
-                }
-
-            }
-
-            override fun onMenuTabReSelected(@IdRes menuItemId: Int) {
-                when (menuItemId) {
-                    R.id.favorite_item -> updateFavourite()
-
-                    R.id.text_to_speech -> if (Common.englishToMayalayam) {
-                        speak()
-                    } else {
-                        Toast.makeText(applicationContext, "Pronunciation is not available for malayalam words", Toast.LENGTH_SHORT).show()
-                    }
-                    R.id.home -> {
-                    }
-                }
-
-            }
-        })
-
-
-        backspace = findViewById<ImageButton>(R.id.backspace)
-        buttonSpace = findViewById<ImageButton>(R.id.buttonSpace)
 
         buttonSpace.setOnClickListener { autoCompleteTextView.dispatchKeyEvent(KeyEvent(0, 62)) }
-
 
         backspace.setOnClickListener {
             if (autoCompleteTextView.length() > 0) {
@@ -293,31 +210,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-        val toggleButton = findViewById<Button>(R.id.toggleButton)
         toggleButton.typeface = type
-
-
         toggleButton.setOnClickListener { toggleButton() }
 
-
-        val chilluButton = findViewById<Button>(R.id.chilluButton)
         chilluButton.typeface = type
         chilluButton.setOnClickListener { toggleChilluButton() }
 
-
-        (findViewById<Button>(R.id.moreToSymbol2)).setOnClickListener {
+        moreToSymbol2.setOnClickListener {
             hide(R.id.fixedRow2)
             show(R.id.fixedRow3)
         }
 
-
-        (findViewById<Button>(R.id.backToSymbol1)).setOnClickListener {
+        backToSymbol1.setOnClickListener {
             show(R.id.fixedRow2)
             hide(R.id.fixedRow3)
         }
 
-
-        (findViewById<Button>(R.id.moreTo2)).setOnClickListener {
+        moreTo2.setOnClickListener {
             hide(R.id.vowRow1)
             hide(R.id.vowRow2)
             hide(R.id.vowRow3)
@@ -326,8 +235,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             show(R.id.vowRow6)
         }
 
-
-        (findViewById<Button>(R.id.moreToCons)).setOnClickListener {
+        moreToCons.setOnClickListener {
             hide(R.id.consRow1)
             hide(R.id.consRow2)
             hide(R.id.consRow3)
@@ -336,7 +244,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             show(R.id.consRow6)
         }
 
-        (findViewById<Button>(R.id.moreToCons2)).setOnClickListener {
+        moreToCons2.setOnClickListener {
             hide(R.id.consRow4)
             hide(R.id.consRow5)
             hide(R.id.consRow6)
@@ -344,7 +252,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             show(R.id.consRow8)
             show(R.id.consRow9)
         }
-        (findViewById<Button>(R.id.backToCons)).setOnClickListener {
+
+        backToCons.setOnClickListener {
             hide(R.id.consRow4)
             hide(R.id.consRow5)
             hide(R.id.consRow6)
@@ -352,7 +261,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             show(R.id.consRow2)
             show(R.id.consRow3)
         }
-        (findViewById<Button>(R.id.backToCons2)).setOnClickListener {
+
+        backToCons2.setOnClickListener {
             hide(R.id.consRow7)
             hide(R.id.consRow8)
             hide(R.id.consRow9)
@@ -360,7 +270,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             show(R.id.consRow5)
             show(R.id.consRow6)
         }
-        (findViewById<Button>(R.id.backTo1)).setOnClickListener {
+
+        backTo1.setOnClickListener {
             hide(R.id.vowRow4)
             hide(R.id.vowRow5)
             hide(R.id.vowRow6)
@@ -368,11 +279,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             show(R.id.vowRow2)
             show(R.id.vowRow3)
         }
-
-
-
-        mBottomBar.setActiveTabColor("#3F51B5")
-
 
         this.symLetters = arrayOf("m", "n", "o", "p", "q", "s", "t", "v", "y", "r", "u", "z", "{", "w", "x", ".")
         this.consLetters = arrayOf("\u00f1", "\u00a1", "\u00f3", "\u00a7", "\u00af", "\u00e2", "\u00e4", "\u00bd", "\u00a8", "\u00ef", "\u00c5", "\u00ab", "\u00b8", "\u00bc", "\u00ae", "\u00b4", "\u00bf", "\u00f4", "\u00aa", "\u00b5", "\u00a3", "\u00d6", "\u00d1", "\u00da", "\u00d4", "\u00e3", "\u00d0", "\u00d5", "\u00de", "\u00e0", "\u00a6", "\u00d8", "\u00dd", "\u00df", "\u00b2", "\u00b0", "\u00b1", "\u00c8", "\u00ca", "\u00ba", "\u00c6", "\u00cd", "\u00a4", "\u00a2", "\u00a5", "\u00b9", "\u00be", "\u00c7", "\u00bb", "\u00c9", "\u00ce", "\u00cf", "\u00d7", "\u00d9", "\u00db", "\u00d3", "\u00e1", "\u00d2", "\u00dc")
@@ -391,24 +297,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun toggleChilluButton() {
-        val togChilluButton = findViewById<Button>(R.id.chilluButton)
         if (this.isChillu == 0) {
             hideAll()
             show(R.id.chilluRow)
             this.isChillu = 1
-            togChilluButton.text = "m"
+            chilluButton.text = "m"
         } else {
             hideAll()
             show(R.id.fixedRow2)
             this.isChillu = 0
-            togChilluButton.text = "\u00c0"
+            chilluButton.text = "\u00c0"
         }
         show(R.id.vowRow1)
         show(R.id.vowRow2)
         show(R.id.vowRow3)
-        val togButton = findViewById<Button>(R.id.toggleButton)
         this.isConsonants = 0
-        togButton.text = "\u00a1"
+        toggleButton.text = "\u00a1"
     }
 
     private fun hide(id: Int) {
@@ -441,14 +345,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun flipCard() {
-        val rootLayout = findViewById<View>(R.id.drawer_layout)
-        val cardFace = findViewById<View>(R.id.re_first)
-        val cardBack = findViewById<View>(R.id.re_second)
 
+        val flipAnimation = FlipAnimation(re_first, re_second)
 
-        val flipAnimation = FlipAnimation(cardFace, cardBack)
-
-        if (cardFace.visibility == View.GONE) {
+        if (re_first.visibility == View.GONE) {
             autoCompleteTextView.typeface = Typeface.DEFAULT
             autoCompleteTextView.setText("")
             autoCompleteTextView.visibility = View.GONE
@@ -456,13 +356,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             Common.englishToMayalayam = true
             textViewHint.visibility = View.VISIBLE
             imageButtonMic.visibility = View.VISIBLE
-            imageButtonClear.visibility = View.GONE
-            imageButtonSearch.visibility = View.GONE
+            imageButton_close.visibility = View.GONE
+            search_word.visibility = View.GONE
             hideKey()
 
             hideMalayalam(R.id.keyBoardLayout)
             textViewHint.text = getString(R.string.eng_mal)
-            floatingActionButton.setImageResource(R.drawable.e)
+            fab_swip.setImageResource(R.drawable.e)
 
         } else {
             val font = Typeface.createFromAsset(assets, "fonts/mlwttkarthika.ttf")
@@ -471,17 +371,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             Common.englishToMayalayam = false
             textViewHint.visibility = View.VISIBLE
             autoCompleteTextView.visibility = View.GONE
-            imageButtonClear.visibility = View.GONE
-            imageButtonSearch.visibility = View.VISIBLE
+            imageButton_close.visibility = View.GONE
+            search_word.visibility = View.VISIBLE
             hideMalayalam(R.id.keyBoardLayout)
             hideKey()
 
             imageButtonMic.visibility = View.GONE
             textViewHint.text = getString(R.string.mal_eng)
-            floatingActionButton.setImageResource(R.drawable.mala)
+            fab_swip.setImageResource(R.drawable.mala)
         }
 
-        rootLayout.startAnimation(flipAnimation)
+        drawer_layout.startAnimation(flipAnimation)
     }
 
     fun onCardClick(view: View) {
@@ -491,19 +391,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun setViews() {
 
         initNavigationDrawer()
-        cardViewList = findViewById(R.id.card_view_list)
-        cardViewListBack = findViewById(R.id.card_view_list_back)
-        listViewSuggestion = findViewById(R.id.list_view_suggestion)
-        listViewSuggestionMalayalam = findViewById(R.id.list_view_suggestion_back)
-        cardViewListMeaning = findViewById(R.id.card_view_list_meaning)
-        cardViewListMeaningBack = findViewById(R.id.card_view_list_meaning_back)
-
-        listViewMeaning = findViewById(R.id.list_view_meaning)
-        listViewMeaningMalayalam = findViewById(R.id.list_view_meaning_back)
-        autoCompleteTextView = findViewById(R.id.autoCompleteTextView)
-        textViewHint = findViewById(R.id.textViewHint)
-        imageButtonMic = findViewById(R.id.imageButtonMic)
-        imageButtonClear = findViewById(R.id.imageButton_close)
         textToSpeech = TextToSpeech(this.applicationContext, TextToSpeech.OnInitListener { })
 
 
@@ -514,8 +401,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         autoCompleteTextView.setOnClickListener(this)
         imageButtonMic.setOnClickListener(this)
-        imageButtonClear.setOnClickListener(this)
+        imageButton_close.setOnClickListener(this)
         textViewHint.setOnClickListener(this)
+        tv_favorite.setOnClickListener(this)
+        tv_pronounce.setOnClickListener(this)
         val intent = intent
         if (intent.getStringExtra("fav") != null) {
             fromFav = intent.getStringExtra("fav")
@@ -558,28 +447,27 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun initNavigationDrawer() {
-        navigationView = findViewById(R.id.navigation_view)
-        navigationView.itemIconTintList = null
-        navigationView.setNavigationItemSelectedListener { item ->
+        navigation_view.itemIconTintList = null
+        navigation_view.setNavigationItemSelectedListener { item ->
             val id = item.itemId
             when (id) {
                 R.id.home -> {
                     finish()
                     val intentHome = Intent(this@MainActivity, MainActivity::class.java)
                     startActivity(intentHome)
-                    drawerLayout.closeDrawers()
+                    drawer_layout.closeDrawers()
                 }
                 R.id.favourite -> {
 
                     val intentFavourite = Intent(this@MainActivity, FavouriteActivity::class.java)
                     startActivity(intentFavourite)
-                    drawerLayout.closeDrawers()
+                    drawer_layout.closeDrawers()
                 }
                 R.id.history -> {
                     val intentHistory = Intent(this@MainActivity, HistoryActivity::class.java)
                     startActivity(intentHistory)
-                    drawerLayout.closeDrawers()
-                    drawerLayout.closeDrawers()
+                    drawer_layout.closeDrawers()
+                    drawer_layout.closeDrawers()
                 }
 //                R.id.block_add -> {
 //
@@ -590,12 +478,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 R.id.google_translate -> {
                     val intentTranslate = Intent(this@MainActivity, GoogleTranslateActivity::class.java)
                     startActivity(intentTranslate)
-                    drawerLayout.closeDrawers()
+                    drawer_layout.closeDrawers()
                 }
 
                 R.id.rate -> {
                     rateApp()
-                    drawerLayout.closeDrawers()
+                    drawer_layout.closeDrawers()
                 }
                 R.id.share -> {
                     val sendIntent = Intent()
@@ -607,27 +495,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 R.id.about -> {
                     val intentAbout = Intent(this@MainActivity, AboutUsActivity::class.java)
                     startActivity(intentAbout)
-                    drawerLayout.closeDrawers()
+                    drawer_layout.closeDrawers()
                 }
             }
             true
         }
 
-        drawerLayout = findViewById(R.id.drawer_layout)
-        actionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+        actionBarDrawerToggle = object : ActionBarDrawerToggle(this, drawer_layout, toolbar, R.string.drawer_open, R.string.drawer_close) {
 
             override fun onDrawerClosed(drawerView: View) {
                 super.onDrawerClosed(drawerView)
-                mBottomBar.show()
+                toolbar.visibility = View.VISIBLE
             }
 
             override fun onDrawerOpened(drawerView: View) {
                 super.onDrawerOpened(drawerView)
                 hideKey()
-                mBottomBar.hide()
+                toolbar.visibility = View.GONE
             }
         }
-        drawerLayout.addDrawerListener(actionBarDrawerToggle)
+        drawer_layout.addDrawerListener(actionBarDrawerToggle)
         actionBarDrawerToggle.syncState()
 
     }
@@ -664,51 +551,49 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                     if (Common.englishToMayalayam) {
                         getWords()
-                        if (listViewSuggestion.adapter.count == 0) {
-                            cardViewList.visibility = View.GONE
-                            textViewFeedbackWord.typeface = Typeface.DEFAULT
-                            textViewFeedbackWord.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
-                            relativeLayoutFeedback.visibility = View.VISIBLE
+                        if (list_view_suggestion.adapter.count == 0) {
+                            card_view_list.visibility = View.GONE
+                            textView_word.typeface = Typeface.DEFAULT
+                            textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
+                            relayout_feedback.visibility = View.VISIBLE
                         } else {
 
 
-                            relativeLayoutFeedback.visibility = View.GONE
+                            relayout_feedback.visibility = View.GONE
 
                         }
-                        imageButtonSearch.visibility = View.GONE
-                        mBottomBar.hide()
-                        //                        adView.setVisibility(View.GONE);
+                        search_word.visibility = View.GONE
+                        toolbar.visibility = View.GONE
+                        //adView.setVisibility(View.GONE);
                     } else {
 
                         getWordsMalayalam()
-                        imageButtonSearch.visibility = View.VISIBLE
-                        if (listViewSuggestionMalayalam.adapter.count == 0) {
-                            cardViewListBack.visibility = View.GONE
-                            textViewFeedbackWord.typeface = type
-                            textViewFeedbackWord.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
-                            relativeLayoutFeedback.visibility = View.VISIBLE
+                        search_word.visibility = View.VISIBLE
+                        if (list_view_suggestion_back.adapter.count == 0) {
+                            card_view_list_back.visibility = View.GONE
+                            textView_word.typeface = type
+                            textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
+                            relayout_feedback.visibility = View.VISIBLE
                         } else {
-
-                            relativeLayoutFeedback.visibility = View.GONE
+                            relayout_feedback.visibility = View.GONE
                         }
                     }
 
 
-                    imageButtonClear.visibility = View.VISIBLE
+                    imageButton_close.visibility = View.VISIBLE
                     imageButtonMic.visibility = View.GONE
-                    floatingActionButton.visibility = View.GONE
+                    fab_swip.visibility = View.GONE
                 } else {
 
-                    floatingActionButton.visibility = View.VISIBLE
+                    fab_swip.visibility = View.VISIBLE
                     if (Common.englishToMayalayam) {
                         imageButtonMic.visibility = View.VISIBLE
                     }
-                    imageButtonClear.visibility = View.GONE
-                    cardViewList.visibility = View.GONE
-                    cardViewListMeaningBack.visibility = View.GONE
-                    cardViewListMeaning.visibility = View.GONE
-                    mBottomBar.hide()
-                }
+                    imageButton_close.visibility = View.GONE
+                    card_view_list.visibility = View.GONE
+                    card_view_list_meaning_back.visibility = View.GONE
+                    card_view_list_meaning.visibility = View.GONE
+                    toolbar.visibility = View.GONE                }
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -735,11 +620,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             c2.close()
             listItemAdapter = ListItemAdapter(applicationContext, strings, this)
             if (listItemAdapter.count != 0) {
-                cardViewList.visibility = View.VISIBLE
-                cardViewListMeaning.visibility = View.GONE
+                card_view_list.visibility = View.VISIBLE
+                card_view_list_meaning.visibility = View.GONE
             }
-            listViewSuggestion.visibility = View.VISIBLE
-            listViewSuggestion.adapter = listItemAdapter
+            list_view_suggestion.visibility = View.VISIBLE
+            list_view_suggestion.adapter = listItemAdapter
 
             databaseHelper.close()
         } catch (sqle: SQLException) {
@@ -764,11 +649,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             c2.close()
             listItemAdapter = ListItemAdapter(applicationContext, strings, this)
             if (listItemAdapter.count != 0) {
-                cardViewListBack.visibility = View.VISIBLE
-                cardViewListMeaningBack.visibility = View.GONE
+                card_view_list_back.visibility = View.VISIBLE
+                card_view_list_meaning_back.visibility = View.GONE
             }
-            listViewSuggestionMalayalam.visibility = View.VISIBLE
-            listViewSuggestionMalayalam.adapter = listItemAdapter
+            list_view_suggestion_back.visibility = View.VISIBLE
+            list_view_suggestion_back.adapter = listItemAdapter
             databaseHelper.close()
         } catch (sqle: SQLException) {
             throw sqle
@@ -818,7 +703,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     fun fillData(text: String?) {
 
         if (text != null) {
-            imageButtonClear.visibility = View.VISIBLE
+            imageButton_close.visibility = View.VISIBLE
             autoCompleteTextView.visibility = View.VISIBLE
             textViewHint.visibility = View.GONE
             autoCompleteTextView.setText(text)
@@ -830,8 +715,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
         }
         imageButtonMic.visibility = View.GONE
-        imageButtonSearch.visibility = View.GONE
-        floatingActionButton.visibility = View.GONE
+        search_word.visibility = View.GONE
+        fab_swip.visibility = View.GONE
 
         hideKey()
         val myDbHelper1 = DatabaseHelper(this)
@@ -871,29 +756,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             val mString = strings.toTypedArray() as Array<String>
 
-            if (mString.size == 0) {
-                textViewFeedbackWord.typeface = typeButton
-                textViewFeedbackWord.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
-                relativeLayoutFeedback.visibility = View.VISIBLE
-
+            if (mString.isEmpty()) {
+                textView_word.typeface = typeButton
+                textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
+                relayout_feedback.visibility = View.VISIBLE
             }
 
             meaningAdapter = MeaningAdapter(this, mString, Common.englishToMayalayam)
             if (meaningAdapter.count != 0) {
-                cardViewListMeaning.visibility = View.VISIBLE
-                cardViewListMeaningBack.visibility = View.VISIBLE
-                cardViewList.visibility = View.GONE
-                cardViewListBack.visibility = View.GONE
+                card_view_list_meaning.visibility = View.VISIBLE
+                card_view_list_meaning_back.visibility = View.VISIBLE
+                card_view_list.visibility = View.GONE
+                card_view_list_back.visibility = View.GONE
             }
-            listViewMeaning.visibility = View.VISIBLE
+            list_view_meaning.visibility = View.VISIBLE
             //            adView.setVisibility(View.GONE);
             if (Common.englishToMayalayam) {
-                mBottomBar.show()
-                listViewMeaning.adapter = meaningAdapter
+                toolbar.visibility = View.VISIBLE
+                list_view_meaning.adapter = meaningAdapter
             } else {
-                mBottomBar.show()
+                toolbar.visibility = View.VISIBLE
                 hideMalayalam(R.id.keyBoardLayout)
-                listViewMeaningMalayalam.adapter = meaningAdapter
+                list_view_meaning_back.adapter = meaningAdapter
 
             }
             myDbHelper1.close()
@@ -998,66 +882,76 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
+        when (v.id) {
+            R.id.autoCompleteTextView -> {
+                //adView.setVisibility(View.GONE);
+                toolbar.visibility = View.GONE
+                if (!Common.englishToMayalayam) {
+                    showKeyboard()
+                    hideKey()
+                    relayout_feedback.visibility = View.GONE
+                } else {
+                    relayout_feedback.visibility = View.GONE
+                    hideMalayalam(R.id.keyBoardLayout)
+                    showKey()
+                }
+            }
 
-        if (v.id == R.id.autoCompleteTextView) {
-            //            adView.setVisibility(View.GONE);
-            mBottomBar.hide()
-
-            if (!Common.englishToMayalayam) {
-                showKeyboard()
+            R.id.imageButtonMic -> {
                 hideKey()
-                relativeLayoutFeedback.visibility = View.GONE
+                imageButtonMic.visibility = View.VISIBLE
+                card_view_list_meaning.visibility = View.GONE
+                speakToText()
+            }
 
-            } else {
-                relativeLayoutFeedback.visibility = View.GONE
+
+            R.id.imageButton_close -> {
+
+                autoCompleteTextView.setText("")
+                card_view_list.visibility = View.GONE
+                card_view_list_meaning.visibility = View.GONE
+                card_view_list_back.visibility = View.GONE
+                card_view_list_meaning_back.visibility = View.GONE
+                if (pref.getInt(Common.COUNT, 5) > 0) {
+                    //                adView.setVisibility(View.VISIBLE);
+                }
+                relayout_feedback.visibility = View.GONE
+            }
+
+            R.id.textViewHint -> {
+
+                textViewHint.visibility = View.GONE
+                //            adView.setVisibility(View.GONE);
+                autoCompleteTextView.visibility = View.VISIBLE
+                autoCompleteTextView.requestFocus()
+                toolbar.visibility = View.GONE
+                if (Common.englishToMayalayam) {
+                    showKey()
+
+                } else {
+                    toolbar.visibility = View.GONE
+                    showKeyboard()
+                }
+            }
+
+            R.id.search_word -> {
                 hideMalayalam(R.id.keyBoardLayout)
-                showKey()
-
+                fillData(autoCompleteTextView.text.toString().trim { it <= ' ' })
             }
-        }
 
-        if (v.id == R.id.imageButtonMic) {
-            hideKey()
-            imageButtonMic.visibility = View.VISIBLE
-            cardViewListMeaning.visibility = View.GONE
-            speakToText()
-        }
-
-        if (v.id == R.id.imageButton_close) {
-
-            autoCompleteTextView.setText("")
-            cardViewList.visibility = View.GONE
-            cardViewListMeaning.visibility = View.GONE
-            cardViewListBack.visibility = View.GONE
-            cardViewListMeaningBack.visibility = View.GONE
-            if (pref.getInt(Common.COUNT, 5) > 0) {
-
-                //                adView.setVisibility(View.VISIBLE);
+            R.id.tv_favorite -> {
+                updateFavourite()
             }
-            relativeLayoutFeedback.visibility = View.GONE
-        }
 
-        if (v.id == R.id.textViewHint) {
-
-            textViewHint.visibility = View.GONE
-            //            adView.setVisibility(View.GONE);
-            autoCompleteTextView.visibility = View.VISIBLE
-            autoCompleteTextView.requestFocus()
-            mBottomBar.hide()
-            if (Common.englishToMayalayam) {
-                showKey()
-
-            } else {
-                mBottomBar.hide()
-                showKeyboard()
+            R.id.tv_pronounce -> {
+                if (Common.englishToMayalayam) {
+                    speak()
+                } else {
+                    Toast.makeText(applicationContext, "Pronunciation is not available for malayalam words", Toast.LENGTH_SHORT).show()
+                }
             }
-        }
 
-        if (v.id == R.id.search_word) {
-            hideMalayalam(R.id.keyBoardLayout)
-            fillData(autoCompleteTextView.text.toString().trim { it <= ' ' })
         }
-
     }
 
 
@@ -1072,26 +966,24 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private fun toggleButton() {
-        val togButton = findViewById(R.id.toggleButton) as Button
         if (this.isConsonants == 0) {
             hideAll()
             show(R.id.consRow1)
             show(R.id.consRow2)
             show(R.id.consRow3)
             this.isConsonants = 1
-            togButton.text = "A"
+            toggleButton.text = "A"
         } else {
             hideAll()
             show(R.id.vowRow1)
             show(R.id.vowRow2)
             show(R.id.vowRow3)
             this.isConsonants = 0
-            togButton.text = "\u00a1"
+            toggleButton.text = "\u00a1"
         }
         show(R.id.fixedRow2)
-        val togChilluButton = findViewById(R.id.chilluButton) as Button
         this.isChillu = 0
-        togChilluButton.text = "\u00c0"
+        chilluButton.text = "\u00c0"
     }
 
 
@@ -1187,7 +1079,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    fun hideMalayalam(id: Int) {
+    private fun hideMalayalam(id: Int) {
         findViewById<View>(id).visibility = View.GONE
 
     }
@@ -1306,8 +1198,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onRestart() {
         super.onRestart()
-
-        relativeLayoutFeedback.visibility = View.GONE
+        relayout_feedback.visibility = View.GONE
     }
 
     public override fun onStart() {

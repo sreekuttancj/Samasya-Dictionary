@@ -124,9 +124,9 @@ class HistoryEnglishFragment : Fragment() {
 
                     R.id.copy -> {
                         val label = "copy"
-                        val clipboard = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        val clip = ClipData.newPlainText(label, copyText)
-                        clipboard.primaryClip = clip
+                        var clipboard = activity!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                        var clip = ClipData.newPlainText(label, copyText)
+                        clipboard.setPrimaryClip(clip)
                         mode.finish()
                         Toast.makeText(activity, "$copyText copied to clipboard", Toast.LENGTH_SHORT).show()
 

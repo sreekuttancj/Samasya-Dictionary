@@ -39,7 +39,7 @@ class MeaningAdapter(context: Context, private val values: Array<String>, intern
                 val clip = ClipData.newPlainText("item", values[position])
 
                 Toast.makeText(context, values[position].toLowerCase() + " copied to clip board", Toast.LENGTH_SHORT).show()
-                clipboard.primaryClip = clip
+                clipboard.setPrimaryClip(clip)
             }
 
             true

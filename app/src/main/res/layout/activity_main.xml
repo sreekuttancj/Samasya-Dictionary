@@ -20,30 +20,58 @@
            android:layout_height="match_parent"
            android:id="@+id/cord_top">
 
-       <RelativeLayout
+           <androidx.appcompat.widget.Toolbar
+               android:layout_width="match_parent"
+               android:layout_height="?attr/actionBarSize"
+               android:layout_gravity="bottom"
+               android:id="@+id/toolbar"
+               android:background="@color/colorAccent">
+
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:id="@+id/li_bottom_bar"
+                   android:weightSum="2"
+                   android:orientation="horizontal">
+
+                   <TextView
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_weight="1"
+                       android:id="@+id/tv_favorite"
+                       android:drawableTop="@drawable/ic_favorite_white_24dp"
+                       android:text="@string/add_to_favorite"
+                       android:layout_gravity="center"
+                       android:gravity="center"
+                       android:textColor="@color/white"/>
+
+                   <TextView
+                       android:layout_width="0dp"
+                       android:layout_height="wrap_content"
+                       android:layout_weight="1"
+                       android:id="@+id/tv_pronounce"
+                       android:drawableTop="@drawable/ic_volume_up_white_24dp"
+                       android:layout_gravity="center"
+                       android:drawablePadding="4dp"
+                       android:textColor="@color/white"
+                       android:gravity="center"
+                       android:text="@string/pronunciation"/>
+
+               </LinearLayout>
+           </androidx.appcompat.widget.Toolbar>
+
+           <RelativeLayout
            android:layout_width="match_parent"
            android:layout_height="120dp"
            android:id="@+id/top_bar"
-           android:background="@color/colorAccent"
-           >
-
-
-
+           android:background="@color/colorAccent">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:id="@+id/card_view_toolbar"
             android:layout_margin="10dp"
             app:cardUseCompatPadding="true"
-            app:cardPreventCornerOverlap="false"
-
-            >
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="center"
-        android:id="@+id/toolbar">
-
+            app:cardPreventCornerOverlap="false">
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -76,12 +104,10 @@
                 />
 
         <AutoCompleteTextView
-            android:layout_gravity="center"
             android:id="@+id/autoCompleteTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
-            android:layout_marginRight="40dp"
             android:layout_marginEnd="40dp"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -89,23 +115,19 @@
             android:textSize="18sp"
             android:gravity="center_vertical|left"
             android:windowSoftInputMode="stateVisible"
-
-
-            />
-
+            android:paddingStart="16dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/textViewHint"
-            android:text="English - Malayalam"
-
+            android:text="@string/eng_mal"
+            android:layout_marginLeft="16dp"
             android:textColor="#BDBDBD"
             android:textStyle="bold"
             android:layout_marginTop="13dp"
-            android:textSize="@dimen/hint"/>
+            android:textSize="@dimen/hint" />
 
-    </androidx.appcompat.widget.Toolbar>
 
     </androidx.cardview.widget.CardView>
 
@@ -218,9 +240,6 @@
                </ListView>
            </androidx.cardview.widget.CardView>
 
-
-
-
            <LinearLayout
                android:background="#fff"
                android:id="@+id/keyBoardLayout"
@@ -316,7 +335,5 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer"
         />
-
-
 
 </androidx.drawerlayout.widget.DrawerLayout>
