@@ -26,16 +26,20 @@ import com.google.firebase.database.FirebaseDatabase
 import com.kobakei.ratethisapp.RateThisApp
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.keyboad.*
+import malayalamdictionary.samasya.MyApplication
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.ListItemAdapter
 import malayalamdictionary.samasya.adapter.MeaningAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
+import malayalamdictionary.samasya.di.ApplicationComponent
 import malayalamdictionary.samasya.helper.Common
 import malayalamdictionary.samasya.helper.ConnectionDetector
 import malayalamdictionary.samasya.helper.FlipAnimation
 import malayalamdictionary.samasya.helper.OnSwipeTouchListener
+import malayalamdictionary.samasya.util.FireBaseHandler
 import java.io.IOException
 import java.util.*
+import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
@@ -73,7 +77,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     var isInternetPresent: Boolean = false
     lateinit var databaseHelper: DatabaseHelper
 
+    @Inject
+    lateinit var fireBaseHandler: FireBaseHandler
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        initDagger()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -933,6 +942,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.tv_favorite -> {
+                fireBaseHandler.logFirebaseEvents("check",null)
                 updateFavourite()
             }
 
@@ -1200,4 +1210,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         RateThisApp.showRateDialogIfNeeded(this)
     }
 
+    private fun initDagger(){
+        (applicationContext as MyApplication)
+                .applicationComponent
+                .inject(this)
+    }
 }
