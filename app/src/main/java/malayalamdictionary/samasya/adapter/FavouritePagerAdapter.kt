@@ -3,8 +3,8 @@ package malayalamdictionary.samasya.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
-import malayalamdictionary.samasya.FavouriteEnglishFragment
-import malayalamdictionary.samasya.FavouriteMalayalamFragment
+import malayalamdictionary.samasya.view.FavouriteEnglishFragment
+import malayalamdictionary.samasya.view.FavouriteMalayalamFragment
 
 class FavouritePagerAdapter(fm: FragmentManager, var numOfTabs: Int) : FragmentStatePagerAdapter(fm) {
 

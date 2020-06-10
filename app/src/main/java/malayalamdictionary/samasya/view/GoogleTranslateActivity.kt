@@ -1,4 +1,4 @@
-package malayalamdictionary.samasya
+package malayalamdictionary.samasya.view
 
 import android.app.ProgressDialog
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import malayalamdictionary.samasya.R
 
 class GoogleTranslateActivity : AppCompatActivity() {
 

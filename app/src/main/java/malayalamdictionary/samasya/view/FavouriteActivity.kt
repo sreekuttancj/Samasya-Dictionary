@@ -1,4 +1,4 @@
-package malayalamdictionary.samasya
+package malayalamdictionary.samasya.view
 
 import android.graphics.Color
 import android.os.Bundle
@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.FavouritePagerAdapter
 
 class FavouriteActivity : AppCompatActivity() {

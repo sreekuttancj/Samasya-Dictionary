@@ -1,4 +1,4 @@
-package malayalamdictionary.samasya
+package malayalamdictionary.samasya.view
 
 import android.app.AlertDialog
 import android.app.ProgressDialog
@@ -13,6 +13,7 @@ import android.widget.ExpandableListView
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.FavouriteAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
 import malayalamdictionary.samasya.helper.FavouriteItem

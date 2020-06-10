@@ -1,4 +1,4 @@
-package malayalamdictionary.samasya
+package malayalamdictionary.samasya.view
 
 import android.content.Context
 import android.content.Intent
@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.snackbar.Snackbar
+import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.helper.Common
 import malayalamdictionary.samasya.helper.ConnectionDetector
 

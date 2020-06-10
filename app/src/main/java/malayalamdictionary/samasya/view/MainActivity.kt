@@ -1,4 +1,4 @@
-package malayalamdictionary.samasya
+package malayalamdictionary.samasya.view
 
 import android.app.Activity
 import android.content.*
@@ -18,25 +18,15 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.annotation.IdRes
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.cardview.widget.CardView
-import androidx.drawerlayout.widget.DrawerLayout
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.database.FirebaseDatabase
 import com.kobakei.ratethisapp.RateThisApp
-import com.roughike.bottombar.BottomBar
-import com.roughike.bottombar.OnMenuTabClickListener
-import com.roughike.bottombar.OnMenuTabSelectedListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.keyboad.*
+import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.ListItemAdapter
 import malayalamdictionary.samasya.adapter.MeaningAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
@@ -157,6 +147,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(applicationContext, "No internet connection", Toast.LENGTH_LONG).show()
             }
         }
+
         search_word.setOnClickListener(this)
         re_first.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeTop() {}
@@ -593,7 +584,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     card_view_list.visibility = View.GONE
                     card_view_list_meaning_back.visibility = View.GONE
                     card_view_list_meaning.visibility = View.GONE
-                    toolbar.visibility = View.GONE                }
+//                    toolbar.visibility = View.GONE
+                    }
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -885,7 +877,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         when (v.id) {
             R.id.autoCompleteTextView -> {
                 //adView.setVisibility(View.GONE);
-                toolbar.visibility = View.GONE
+//                toolbar.visibility = View.GONE
                 if (!Common.englishToMayalayam) {
                     showKeyboard()
                     hideKey()
@@ -916,6 +908,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     //                adView.setVisibility(View.VISIBLE);
                 }
                 relayout_feedback.visibility = View.GONE
+                toolbar.visibility = View.VISIBLE
+                showKey()
             }
 
             R.id.textViewHint -> {
@@ -924,12 +918,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 //            adView.setVisibility(View.GONE);
                 autoCompleteTextView.visibility = View.VISIBLE
                 autoCompleteTextView.requestFocus()
-                toolbar.visibility = View.GONE
+//                toolbar.visibility = View.GONE
                 if (Common.englishToMayalayam) {
                     showKey()
-
                 } else {
-                    toolbar.visibility = View.GONE
+//                    toolbar.visibility = View.GONE
                     showKeyboard()
                 }
             }
