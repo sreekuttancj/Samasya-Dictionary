@@ -16,6 +16,7 @@ import android.widget.ExpandableListView
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_favourite.*
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.FavouriteAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
@@ -27,7 +28,6 @@ class FavouriteEnglishFragment : Fragment() {
     private lateinit var meaningArray: ArrayList<String>
 
     private lateinit var listAdapter: FavouriteAdapter
-    private lateinit var expListView: ExpandableListView
     private lateinit var listDataHeader: MutableList<FavouriteItem>
     private lateinit var listDataChild: HashMap<String, List<String>>
     var selectAll: Boolean = true
@@ -43,7 +43,6 @@ class FavouriteEnglishFragment : Fragment() {
         val rowView: View = inflater.inflate(R.layout.fragment_favourite, container, false)
 
 
-        expListView = rowView.findViewById(R.id.lvExp_favourite) as ExpandableListView
         listDataHeader = ArrayList()
         listDataChild = HashMap()
         expandedItem = SparseBooleanArray()
@@ -52,15 +51,15 @@ class FavouriteEnglishFragment : Fragment() {
         val size = Point()
         display.getSize(size)
         val width = size.x
-        expListView.setIndicatorBounds(width - getDipsFromPixel(35f), width - getDipsFromPixel(5f))
+        lvExp_favourite.setIndicatorBounds(width - getDipsFromPixel(35f), width - getDipsFromPixel(5f))
 
         progress = ProgressDialog(activity)
         favouriteTask = FavouriteTask()
         favouriteTask.execute()
 
-        expListView.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+        lvExp_favourite.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
 
-        expListView.setOnGroupClickListener { expandableListView, view, i, l ->
+        lvExp_favourite.setOnGroupClickListener { expandableListView, view, i, l ->
             expanded = !expandableListView.isGroupExpanded(i)
             if (!actionModeEnabled && expanded) {
                 expandedItem.put(i, expanded)
@@ -74,10 +73,10 @@ class FavouriteEnglishFragment : Fragment() {
             }
             actionModeEnabled
         }
-        expListView.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener {
+        lvExp_favourite.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener {
             override fun onItemCheckedStateChanged(mode: ActionMode, position: Int, id: Long, checked: Boolean) {
                 if (expandedItem.size() == 0) {
-                    val checkedCount = expListView.checkedItemCount
+                    val checkedCount = lvExp_favourite.checkedItemCount
                     mode.title = checkedCount.toString()
                     listAdapter.toggleSelection(position)
                     val selected = listAdapter.getSelectedIds()
@@ -98,7 +97,7 @@ class FavouriteEnglishFragment : Fragment() {
 
                     Toast.makeText(activity, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
                     expandedItem.clear()
-                    expListView.setAdapter(listAdapter)
+                    lvExp_favourite.setAdapter(listAdapter)
 
                 }
             }
@@ -135,16 +134,16 @@ class FavouriteEnglishFragment : Fragment() {
 
                     R.id.select_all -> {
                         selectAll = if (selectAll) {
-                            for (i in 0 until expListView.adapter.count) {
-                                expListView.setItemChecked(i, true)
+                            for (i in 0 until lvExp_favourite.adapter.count) {
+                                lvExp_favourite.setItemChecked(i, true)
                                 listAdapter.selectView(i, true)
                             }
                             false
 
                         } else {
-                            for (i in 0 until expListView.adapter.count) {
+                            for (i in 0 until lvExp_favourite.adapter.count) {
 
-                                expListView.setItemChecked(i, false)
+                                lvExp_favourite.setItemChecked(i, false)
                                 listAdapter.selectView(i, false)
                             }
                             true
@@ -294,7 +293,7 @@ class FavouriteEnglishFragment : Fragment() {
             super.onPostExecute(s)
             progress.dismiss()
             listAdapter = FavouriteAdapter(activity!!, listDataHeader, listDataChild, true)
-            expListView.setAdapter(listAdapter)
+            lvExp_favourite.setAdapter(listAdapter)
 
         }
     }

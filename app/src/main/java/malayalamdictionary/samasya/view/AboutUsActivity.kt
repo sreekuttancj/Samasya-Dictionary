@@ -8,13 +8,10 @@ import android.os.Bundle
 import android.widget.RelativeLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.activity_about_us.*
 import malayalamdictionary.samasya.R
 
 class AboutUsActivity : AppCompatActivity() {
-
-    private lateinit var mToolbar: Toolbar
-
-    private lateinit var relativeLayoutLikeUs: RelativeLayout
 
     private val FACEBOOK_URL = "https://www.facebook.com/SamasyaDictionary/"
     private var FACEBOOK_PAGE_ID = "1618738521757689"
@@ -23,19 +20,13 @@ class AboutUsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_about_us)
 
-
-        mToolbar = findViewById<Toolbar>(R.id.toolbar)
-
-        relativeLayoutLikeUs = findViewById(R.id.relayoutLikeUs)
-
-        mToolbar.title = "About Us"
-        setSupportActionBar(mToolbar)
+        toolbar.title = "About Us"
+        setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { finish() }
 
-        mToolbar.setNavigationOnClickListener { finish() }
-
-        relativeLayoutLikeUs.setOnClickListener {
+        relayoutLikeUs.setOnClickListener {
             val facebookIntent = Intent(Intent.ACTION_VIEW)
             val facebookUrl = getFacebookPageURL(this@AboutUsActivity)
             facebookIntent.data = Uri.parse(facebookUrl)

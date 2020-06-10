@@ -794,7 +794,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
-    fun speak() {
+    private fun speak() {
 
         hideKey()
         if (autoCompleteTextView.text.toString() != "") {
@@ -807,7 +807,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    fun speakToText() {
+    private fun speakToText() {
 
         val intentSpeak = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intentSpeak.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,

@@ -9,50 +9,46 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import kotlinx.android.synthetic.main.activity_google_translaet.*
 import malayalamdictionary.samasya.R
 
 class GoogleTranslateActivity : AppCompatActivity() {
 
-    val URL = "https://translate.google.co.in/?hl=en"
-    private lateinit var browser: WebView
-
+    private val URL = "https://translate.google.co.in/?hl=en"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_google_translaet)
 
-        val mToolbar = findViewById<Toolbar>(R.id.toolbar)
         window.setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON)
-        browser = findViewById(R.id.webview)
-        mToolbar.title = "Samasya"
-        setSupportActionBar(mToolbar)
+        toolbar.title = "Samasya"
+        setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        mToolbar.setNavigationOnClickListener(View.OnClickListener { finish() })
+        toolbar.setNavigationOnClickListener { finish() }
         val activity = this
         val progressDialog = ProgressDialog(activity)
 
+        with(webview){
+            webChromeClient = object : WebChromeClient() {
+                override fun onProgressChanged(view: WebView, progress: Int) {
+                    progressDialog.show()
+                    progressDialog.setTitle("Loading...")
+                    progressDialog.progress = 0
+                    activity.setProgress(progress * 1000)
+                    progressDialog.incrementProgressBy(progress)
+                    if (progress == 100 && progressDialog.isShowing)
+                        progressDialog.dismiss()
 
-        browser.webChromeClient = object : WebChromeClient() {
-            override fun onProgressChanged(view: WebView, progress: Int) {
-                progressDialog.show()
-                progressDialog.setTitle("Loading...")
-                progressDialog.progress = 0
-                activity.setProgress(progress * 1000)
-                progressDialog.incrementProgressBy(progress)
-                if (progress == 100 && progressDialog.isShowing)
-                    progressDialog.dismiss()
-
+                }
             }
+            webViewClient = MyBrowser()
+            settings.loadsImagesAutomatically = true
+            settings.javaScriptEnabled = true
+            scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
+            loadUrl(URL)
         }
-
-        browser.webViewClient = MyBrowser()
-
-        browser.settings.loadsImagesAutomatically = true
-        browser.settings.javaScriptEnabled = true
-        browser.scrollBarStyle = View.SCROLLBARS_INSIDE_OVERLAY
-        browser.loadUrl(URL)
     }
 
     private inner class MyBrowser : WebViewClient() {
@@ -61,6 +57,5 @@ class GoogleTranslateActivity : AppCompatActivity() {
             view.loadUrl(url)
             return true
         }
-
     }
 }

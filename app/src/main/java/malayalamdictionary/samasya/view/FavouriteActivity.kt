@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import kotlinx.android.synthetic.main.activity_favourite.*
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.FavouritePagerAdapter
 
@@ -14,40 +15,35 @@ class FavouriteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favourite)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Favourite"
         toolbar.setTitleTextColor(Color.parseColor("#000000"))
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         supportActionBar!!.setDisplayShowHomeEnabled(true)
 
-        val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
-        tabLayout.addTab(tabLayout.newTab().setText("English - Malayalam"))
-        tabLayout.addTab(tabLayout.newTab().setText("Malayalam - English"))
-        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
-
-       val viewPager = findViewById<ViewPager>(R.id.pager)
+        tab_layout.addTab(tab_layout.newTab().setText("English - Malayalam"))
+        tab_layout.addTab(tab_layout.newTab().setText("Malayalam - English"))
+        tab_layout.tabGravity = TabLayout.GRAVITY_FILL
 
         toolbar.setNavigationOnClickListener { finish() }
 
-        val adapter = FavouritePagerAdapter(supportFragmentManager, tabLayout.tabCount)
-        viewPager.adapter = adapter
-        viewPager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
-        tabLayout.setOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        val adapter = FavouritePagerAdapter(supportFragmentManager, tab_layout.tabCount)
+        pager.adapter = adapter
+        pager.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tab_layout))
+        tab_layout.setOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
             override fun onTabSelected(tab: TabLayout.Tab) {
 
-                viewPager.currentItem = tab.position
+                pager.currentItem = tab.position
 
 
                 when (tab.position) {
 
-                    0 -> viewPager.currentItem = 0
-                    1 -> viewPager.currentItem = 1
+                    0 -> pager.currentItem = 0
+                    1 -> pager.currentItem = 1
 
                     else ->
-
-                        viewPager.currentItem = tab.position
+                        pager.currentItem = tab.position
                 }
             }
 

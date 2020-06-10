@@ -17,6 +17,7 @@ import android.widget.ExpandableListView
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_history.*
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.HistoryAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
@@ -25,7 +26,6 @@ import java.util.*
 
 class HistoryEnglishFragment : Fragment() {
     private lateinit var listAdapter: HistoryAdapter
-    private lateinit var expListView: ExpandableListView
     private lateinit var listDataHeader: MutableList<HistoryItems>
     private lateinit var listDataChild: HashMap<String, List<String>>
     private lateinit var historyItems: MutableList<HistoryItems>
@@ -42,7 +42,6 @@ class HistoryEnglishFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rowView: View = inflater.inflate(R.layout.fragment_history, container, false)
 
-        expListView = rowView.findViewById(R.id.lvExp_history)
         listDataHeader = ArrayList()
         listDataChild = HashMap()
         expandedItem = SparseBooleanArray()
@@ -51,16 +50,16 @@ class HistoryEnglishFragment : Fragment() {
         val size = Point()
         display?.getSize(size)
         val width = size.x
-        expListView.setIndicatorBounds(width - (getDipsFromPixel(35F)), width - getDipsFromPixel(5F))
+        lvExp_history.setIndicatorBounds(width - (getDipsFromPixel(35F)), width - getDipsFromPixel(5F))
 
         progress = ProgressDialog(activity)
         historyTask = HistoryTask()
         historyTask.execute()
 
-        expListView.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
+        lvExp_history.choiceMode = ListView.CHOICE_MODE_MULTIPLE_MODAL
 
 
-        expListView.setOnGroupClickListener { expandableListView, view, i, l ->
+        lvExp_history.setOnGroupClickListener { expandableListView, view, i, l ->
             expanded = !expandableListView.isGroupExpanded(i)
             if (!actionModeEnabled && expanded) {
                 expandedItem.put(i, expanded)
@@ -76,11 +75,11 @@ class HistoryEnglishFragment : Fragment() {
         }
 
 
-        expListView.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener {
+        lvExp_history.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener {
 
             override fun onItemCheckedStateChanged(mode: ActionMode, position: Int, id: Long, checked: Boolean) {
                 if (expandedItem.size() == 0) {
-                    val checkedCount = expListView.checkedItemCount
+                    val checkedCount = lvExp_history.checkedItemCount
                     mode.title = checkedCount.toString()
                     listAdapter.toggleSelection(position)
                     val selected = listAdapter.getSelectedIds()
@@ -102,7 +101,7 @@ class HistoryEnglishFragment : Fragment() {
 
                     Toast.makeText(activity, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
                     expandedItem.clear()
-                    expListView.setAdapter(listAdapter)
+                    lvExp_history.setAdapter(listAdapter)
                 }
             }
 
@@ -137,16 +136,16 @@ class HistoryEnglishFragment : Fragment() {
 
                     R.id.select_all -> {
                         selectAll = if (selectAll) {
-                            for (i in 0 until expListView.adapter.count) {
-                                expListView.setItemChecked(i, true)
+                            for (i in 0 until lvExp_history.adapter.count) {
+                                lvExp_history.setItemChecked(i, true)
                                 listAdapter.selectView(i, true)
                             }
                             false
 
                         } else {
-                            for (i in 0 until expListView.adapter.count) {
+                            for (i in 0 until lvExp_history.adapter.count) {
 
-                                expListView.setItemChecked(i, false)
+                                lvExp_history.setItemChecked(i, false)
                                 listAdapter.selectView(i, false)
                             }
                             true
@@ -293,7 +292,7 @@ class HistoryEnglishFragment : Fragment() {
             super.onPostExecute(s)
             progress.dismiss()
             listAdapter = HistoryAdapter(requireContext(), listDataHeader, listDataChild, true)
-            expListView.setAdapter(listAdapter)
+            lvExp_history.setAdapter(listAdapter)
 
         }
     }

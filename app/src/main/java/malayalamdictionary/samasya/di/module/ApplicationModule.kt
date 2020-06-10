@@ -10,6 +10,6 @@ class ApplicationModule(private val application: Application) {
 
     @Provides
     fun applicationContext(): Context {
-        return application
+        return application.applicationContext
     }
 }
