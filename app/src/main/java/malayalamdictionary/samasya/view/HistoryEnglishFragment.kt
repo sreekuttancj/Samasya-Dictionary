@@ -1,5 +1,6 @@
 package malayalamdictionary.samasya.view
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.ClipData
@@ -13,16 +14,18 @@ import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.*
 import android.widget.AbsListView
-import android.widget.ExpandableListView
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_history.*
+import malayalamdictionary.samasya.MyApplication
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.HistoryAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
 import malayalamdictionary.samasya.helper.HistoryItems
+import malayalamdictionary.samasya.util.FireBaseHandler
 import java.util.*
+import javax.inject.Inject
 
 class HistoryEnglishFragment : Fragment() {
     private lateinit var listAdapter: HistoryAdapter
@@ -39,9 +42,22 @@ class HistoryEnglishFragment : Fragment() {
     private lateinit var expandedItem: SparseBooleanArray
     var expanded = false
 
+    @Inject
+    lateinit var fireBaseHandler: FireBaseHandler
+
+    override fun onAttach(activity: Activity?) {
+        super.onAttach(activity)
+        initDagger()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rowView: View = inflater.inflate(R.layout.fragment_history, container, false)
 
+        return rowView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         listDataHeader = ArrayList()
         listDataChild = HashMap()
         expandedItem = SparseBooleanArray()
@@ -50,8 +66,8 @@ class HistoryEnglishFragment : Fragment() {
         val size = Point()
         display?.getSize(size)
         val width = size.x
+        if(lvExp_history == null) Log.i("check_expandable","null value")
         lvExp_history.setIndicatorBounds(width - (getDipsFromPixel(35F)), width - getDipsFromPixel(5F))
-
         progress = ProgressDialog(activity)
         historyTask = HistoryTask()
         historyTask.execute()
@@ -73,7 +89,6 @@ class HistoryEnglishFragment : Fragment() {
             }
             actionModeEnabled
         }
-
 
         lvExp_history.setMultiChoiceModeListener(object : AbsListView.MultiChoiceModeListener {
 
@@ -201,16 +216,18 @@ class HistoryEnglishFragment : Fragment() {
                 }
             }
 
-
             override fun onDestroyActionMode(mode: ActionMode) {
                 listAdapter.removeSelection()
                 actionModeEnabled = false
 
             }
         })
+    }
 
-
-        return rowView
+    private fun initDagger() {
+        (activity?.applicationContext as MyApplication)
+                .applicationComponent
+                .inject(this)
     }
 
     private fun getDipsFromPixel(pixels: Float): Int {
@@ -219,7 +236,6 @@ class HistoryEnglishFragment : Fragment() {
         // Convert the dps to pixels, based on density scale
         return (pixels * scale + 0.5f).toInt()
     }
-
 
     private fun getDataFromDb() {
 
@@ -271,7 +287,13 @@ class HistoryEnglishFragment : Fragment() {
             val meaning: List<String>
             meaning = getMeaningFromDb(listDataHeader[i].name)
             listDataChild[listDataHeader[i].name.toString()] = meaning
-        }
+          }
+
+        //track fire base event for no of history items
+        Log.i("check_history_count","${listDataHeader.size}")
+        val bundle = Bundle()
+        bundle.putInt(FireBaseHandler.HISTORY_ENGLISH_COUNT, listDataHeader.size)
+        fireBaseHandler.logFirebaseEvents(FireBaseHandler.HISTORY_ENGLISH, bundle)
     }
 
     private inner class HistoryTask : AsyncTask<String, String, String>() {
@@ -293,7 +315,6 @@ class HistoryEnglishFragment : Fragment() {
             progress.dismiss()
             listAdapter = HistoryAdapter(requireContext(), listDataHeader, listDataChild, true)
             lvExp_history.setAdapter(listAdapter)
-
         }
     }
 

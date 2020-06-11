@@ -1,5 +1,6 @@
 package malayalamdictionary.samasya.view
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.ClipData
@@ -9,19 +10,22 @@ import android.database.SQLException
 import android.graphics.Point
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.util.SparseBooleanArray
 import android.view.*
 import android.widget.AbsListView
-import android.widget.ExpandableListView
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_favourite.*
+import malayalamdictionary.samasya.MyApplication
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.FavouriteAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
 import malayalamdictionary.samasya.helper.FavouriteItem
+import malayalamdictionary.samasya.util.FireBaseHandler
 import java.util.*
+import javax.inject.Inject
 
 class FavouriteEnglishFragment : Fragment() {
     private lateinit var favouriteItems: MutableList<FavouriteItem>
@@ -39,9 +43,22 @@ class FavouriteEnglishFragment : Fragment() {
     private lateinit var expandedItem: SparseBooleanArray
     var expanded = false
 
+    @Inject
+    lateinit var fireBaseHandler: FireBaseHandler
+
+    override fun onAttach(activity: Activity?) {
+        super.onAttach(activity)
+        initDagger()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rowView: View = inflater.inflate(R.layout.fragment_favourite, container, false)
 
+        return rowView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         listDataHeader = ArrayList()
         listDataChild = HashMap()
@@ -208,7 +225,12 @@ class FavouriteEnglishFragment : Fragment() {
                 actionModeEnabled = false
             }
         })
-        return rowView
+    }
+
+    private fun initDagger() {
+        (activity?.applicationContext as MyApplication)
+                .applicationComponent
+                .inject(this)
     }
 
     private fun prepareListData() {
@@ -221,6 +243,13 @@ class FavouriteEnglishFragment : Fragment() {
             meaning = getMeaningFromDb(listDataHeader[i].name)
             listDataChild[listDataHeader[i].name.toString()] = meaning
         }
+
+        //track fire base event for no of favorite items
+        Log.i("check_favorite_count","${listDataHeader.size}")
+        val bundle = Bundle()
+        bundle.putInt(FireBaseHandler.FAVORITE_ENGLISH_COUNT, listDataHeader.size)
+        fireBaseHandler.logFirebaseEvents(FireBaseHandler.FAVORITE_ENGLISH, bundle)
+
     }
 
 

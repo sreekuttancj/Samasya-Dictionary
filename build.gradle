@@ -18,6 +18,7 @@ buildscript {
 
 ext{
     dagger_version = "2.27"
+    lifecycle_version = "2.2.0"
 }
 
 allprojects {

@@ -13,6 +13,7 @@ import android.speech.tts.TextToSpeech
 import android.text.Editable
 import android.text.Html
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
@@ -20,6 +21,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.database.FirebaseDatabase
@@ -57,19 +60,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var type: Typeface
     private lateinit var typeButton: Typeface
-    lateinit var pref: SharedPreferences
-    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
-    lateinit var symLetters: Array<String>
-    lateinit var consLetters: Array<String>
-    lateinit var vowLetters: Array<String>
-    lateinit var chilluLetters: Array<String>
-    var isShowKeyboard: Boolean = false
+    private lateinit var symLetters: Array<String>
+    private lateinit var consLetters: Array<String>
+    private lateinit var vowLetters: Array<String>
+    private lateinit var chilluLetters: Array<String>
+    private var isShowKeyboard: Boolean = false
     var charIndex: Int = 0
     private lateinit var text: String
     var cursorPossition: Int = 0
-    var isConsonants: Int = 0
-    var isChillu: Int = 0
+    private var isConsonants: Int = 0
+    private var isChillu: Int = 0
     lateinit var typedWord: String
     var longPressed: Boolean = false
 
@@ -80,9 +81,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     @Inject
     lateinit var fireBaseHandler: FireBaseHandler
 
+    @Inject
+    lateinit var preference: SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
         initDagger()
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -92,15 +95,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         val database = FirebaseDatabase.getInstance()
         val myRef = database.getReference("English")
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
-
         this.type = Typeface.createFromAsset(assets, "fonts/mal.ttf")
         typeButton = Typeface.createFromAsset(assets, "fonts/mlwttkarthika.ttf")
         this.isShowKeyboard = false
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         val connectionDetector = ConnectionDetector(applicationContext)
-        pref = applicationContext.getSharedPreferences(Common.MyPREFERENCES, Context.MODE_PRIVATE)
 
 //        Log.d("admob_id",getString(R.string.ad_unit_id));
 //        adView = (NativeExpressAdView)findViewById(R.id.adView_native);
@@ -111,6 +111,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         button_google_translate.setOnClickListener {
             isInternetPresent = connectionDetector.isConnectingToInternet()
+            fireBaseHandler.logFirebaseEvents(FireBaseHandler.USE_GOOGLE_TRANSLATE, null)
 
             if (isInternetPresent) {
                 val copyText = autoCompleteTextView.text.toString().trim { it <= ' ' }
@@ -134,7 +135,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
         databaseHelper = DatabaseHelper(this)
+        listItemAdapter = ListItemAdapter(this, ArrayList(),this)
         buttonFeedBack.setOnClickListener {
+
+            fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEND_TO_DB, null)
+
             isInternetPresent = connectionDetector.isConnectingToInternet()
 
             if (isInternetPresent) {
@@ -156,7 +161,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 Toast.makeText(applicationContext, "No internet connection", Toast.LENGTH_LONG).show()
             }
         }
-
+        adapterObservers()
         search_word.setOnClickListener(this)
         re_first.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeTop() {}
@@ -296,6 +301,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
+    private fun adapterObservers(){
+        listItemAdapter.getSelectedWordLiveData().observe(this, Observer {word ->
+           Log.i("check_listItemAdapter", " called live data and fill data: $word")
+            fillData(word)
+        })
+    }
+
     private fun toggleChilluButton() {
         if (this.isChillu == 0) {
             hideAll()
@@ -364,6 +376,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             textViewHint.text = getString(R.string.eng_mal)
             fab_swip.setImageResource(R.drawable.e)
 
+            //track fire base event for fab click`
+            fireBaseHandler.logFirebaseEvents(FireBaseHandler.FAB_M, null)
         } else {
             val font = Typeface.createFromAsset(assets, "fonts/mlwttkarthika.ttf")
             autoCompleteTextView.typeface = font
@@ -379,6 +393,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             imageButtonMic.visibility = View.GONE
             textViewHint.text = getString(R.string.mal_eng)
             fab_swip.setImageResource(R.drawable.mala)
+
+            //track fire base event for fab click`
+            fireBaseHandler.logFirebaseEvents(FireBaseHandler.FAB_E, null)
         }
 
         drawer_layout.startAnimation(flipAnimation)
@@ -392,7 +409,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         initNavigationDrawer()
         textToSpeech = TextToSpeech(this.applicationContext, TextToSpeech.OnInitListener { })
-
 
         setSymbolButtons()
         setConsonantButtons()
@@ -420,7 +436,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    fun rateApp() {
+    private fun rateApp() {
         val intent = Intent(Intent.ACTION_VIEW)
 
         intent.data = Uri.parse("https://goo.gl/TltKno")
@@ -476,16 +492,23 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //                    drawerLayout.closeDrawers()
 //                }
                 R.id.google_translate -> {
+                    //track fire base event for google translate click
+                    fireBaseHandler.logFirebaseEvents(FireBaseHandler.GOOGLE_TRANSLATE_CLICK, null)
+
                     val intentTranslate = Intent(this@MainActivity, GoogleTranslateActivity::class.java)
                     startActivity(intentTranslate)
                     drawer_layout.closeDrawers()
                 }
 
                 R.id.rate -> {
+                    fireBaseHandler.logFirebaseEvents(FireBaseHandler.RATE_US, null)
+
                     rateApp()
                     drawer_layout.closeDrawers()
                 }
                 R.id.share -> {
+                    fireBaseHandler.logFirebaseEvents(FireBaseHandler.SHARE_APP, null)
+
                     val sendIntent = Intent()
                     sendIntent.action = Intent.ACTION_SEND
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Download Samasya - English Malayalam Dictionary :https://goo.gl/TltKno")
@@ -493,6 +516,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     startActivity(sendIntent)
                 }
                 R.id.about -> {
+                    fireBaseHandler.logFirebaseEvents(FireBaseHandler.ABOUT, null)
+
                     val intentAbout = Intent(this@MainActivity, AboutUsActivity::class.java)
                     startActivity(intentAbout)
                     drawer_layout.closeDrawers()
@@ -546,7 +571,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 
-
                 if (s.length > 1) {
 
                     if (Common.englishToMayalayam) {
@@ -557,10 +581,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                             textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
                             relayout_feedback.visibility = View.VISIBLE
                         } else {
-
-
                             relayout_feedback.visibility = View.GONE
-
                         }
                         search_word.visibility = View.GONE
                         toolbar.visibility = View.GONE
@@ -701,20 +722,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    fun fillData(text: String?) {
-
-        if (text != null) {
+    private fun fillData(word: String) {
             imageButton_close.visibility = View.VISIBLE
             autoCompleteTextView.visibility = View.VISIBLE
             textViewHint.visibility = View.GONE
             autoCompleteTextView.setText(text)
             if (!Common.englishToMayalayam) {
+               //track firebase event searched malayalam word
+                val bundle = Bundle()
+                bundle.putString(FireBaseHandler.SEARCH_MALAYALAM_WORD,word)
+                fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEARCH_MALAYALAM, bundle)
+
                 autoCompleteTextView.typeface = type
             } else {
+                //track firebase event searched english word
+                val bundle = Bundle()
+                bundle.putString(FireBaseHandler.SEARCH_ENGLISH_WORD,word)
+                fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEARCH_ENGLISH, bundle)
+
                 autoCompleteTextView.typeface = Typeface.DEFAULT
             }
             autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
-        }
+
         imageButtonMic.visibility = View.GONE
         search_word.visibility = View.GONE
         fab_swip.visibility = View.GONE
@@ -727,14 +756,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             if (Common.englishToMayalayam) {
                 historyUpdate()
-
                 c1 = myDbHelper1.readableDatabase.rawQuery("Select * From samasya_eng_mal where ENG like '" + autoCompleteTextView.text.toString().trim { it <= ' ' }.replace("''", "").replace("'", "''") + "'", null)
-
             } else {
                 historyUpdate()
-
                 c1 = myDbHelper1.readableDatabase.rawQuery("Select * From samasya_eng_mal where MAL like '" + autoCompleteTextView.text.toString().trim { it <= ' ' }.replace("''", "").replace("'", "''") + "'", null)
-
             }
 
             val strings = ArrayList<String>()
@@ -742,8 +767,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             if (Common.englishToMayalayam) {
                 while (!c1.isAfterLast) {
                     strings.add(c1.getString(1).replace("\u00ad", "\u00ef"))
-
-
                     c1.moveToNext()
                 }
             } else {
@@ -752,7 +775,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                     c1.moveToNext()
                 }
-
             }
 
             val mString = strings.toTypedArray() as Array<String>
@@ -797,18 +819,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun speak() {
 
         hideKey()
-        if (autoCompleteTextView.text.toString() != "") {
+        val word = autoCompleteTextView.text.toString().trim { it <= ' ' }
+        if (word != "") {
             textToSpeech.language = Locale.getDefault()
             textToSpeech.isLanguageAvailable(Locale.getDefault())
-            textToSpeech.speak(autoCompleteTextView.text.toString().trim { it <= ' ' }, TextToSpeech.QUEUE_FLUSH, null)
+            textToSpeech.speak(word, TextToSpeech.QUEUE_FLUSH, null)
         } else {
             Toast.makeText(applicationContext, "Please choose a word", Toast.LENGTH_SHORT).show()
         }
-
+        //track firebase event
+        val bundle = Bundle()
+        bundle.putString(FireBaseHandler.PRONUNCIATION_WORD, word)
+        fireBaseHandler.logFirebaseEvents(FireBaseHandler.PRONUNCIATION, bundle)
     }
 
     private fun speakToText() {
-
         val intentSpeak = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         intentSpeak.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
                 RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -816,11 +841,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         intentSpeak.putExtra(RecognizerIntent.EXTRA_PROMPT,
                 getString(R.string.speech_prompt))
         try {
+            //track fire base event for search mic
+            fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEARCH_USING_MIC, null)
             startActivityForResult(intentSpeak, REQ_CODE_SPEECH_INPUT)
         } catch (e: ActivityNotFoundException) {
+            //track fire base event for search mic not support
+            fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEARCH_USING_MIC_NOT_SUPPORT, null)
             Toast.makeText(applicationContext, getString(R.string.speech_not_supported), Toast.LENGTH_SHORT).show()
         }
-
     }
 
 
@@ -837,8 +865,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    fun updateFavourite() {
-
+    private fun updateFavourite() {
 
         if (autoCompleteTextView.text.toString().trim { it <= ' ' } != "") {
 
@@ -849,17 +876,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 try {
                     if (favourite.length > REQ_CODE_SPEECH_INPUT) {
 
-
                         val c444: Cursor?
                         if (Common.englishToMayalayam) {
                             c444 = databaseHelper.writableDatabase.rawQuery("INSERT INTO samasya_eng_favourite (ENG) values('" + favourite.replace("'", "''") + "')", null)
                             Toast.makeText(this, "$favourite added to favourites", Toast.LENGTH_SHORT).show()
-
+                            val bundle = Bundle()
+                            bundle.putString(FireBaseHandler.SAVED_WORD, favourite)
+                            fireBaseHandler.logFirebaseEvents(FireBaseHandler.SAVE_WORD_ENGLISH,bundle)
                         } else {
                             Toast.makeText(this, " Word added to favourites", Toast.LENGTH_SHORT).show()
-
                             c444 = databaseHelper.writableDatabase.rawQuery("INSERT INTO samasya_mal_favourite (MAL) values('" + favourite.replace("'", "''") + "')", null)
-
+                            val bundle = Bundle()
+                            bundle.putString(FireBaseHandler.SAVED_WORD, favourite)
+                            fireBaseHandler.logFirebaseEvents(FireBaseHandler.SAVE_WORD_MALAYALAM,bundle)
                         }
 
                         c444!!.moveToFirst()
@@ -913,7 +942,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 card_view_list_meaning.visibility = View.GONE
                 card_view_list_back.visibility = View.GONE
                 card_view_list_meaning_back.visibility = View.GONE
-                if (pref.getInt(Common.COUNT, 5) > 0) {
+                if (preference.getInt(Common.COUNT, 5) > 0) {
                     //                adView.setVisibility(View.VISIBLE);
                 }
                 relayout_feedback.visibility = View.GONE
@@ -937,12 +966,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             R.id.search_word -> {
+                val malayalamWord = autoCompleteTextView.text.toString().trim { it <= ' ' }
+                //track fire base event for malayalam word search using search button
+                val bundle = Bundle()
+                bundle.putString(FireBaseHandler.SEARCH_MALAYALAM_IMAGE_BUTTON_WORD,malayalamWord)
+                fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEARCH_MALAYALAM_IMAGE_BUTTON, bundle)
+
                 hideMalayalam(R.id.keyBoardLayout)
-                fillData(autoCompleteTextView.text.toString().trim { it <= ' ' })
+                fillData(malayalamWord)
             }
 
             R.id.tv_favorite -> {
-                fireBaseHandler.logFirebaseEvents("check",null)
                 updateFavourite()
             }
 

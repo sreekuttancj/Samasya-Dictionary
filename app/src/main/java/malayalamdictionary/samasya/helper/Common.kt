@@ -7,7 +7,7 @@ class Common {
         const val COUNT = "countKey"
         var englishToMayalayam = true
 
-         val SWIPE_THRESHOLD = 100
-         val SWIPE_VELOCITY_THRESHOLD = 100
+         const val SWIPE_THRESHOLD = 100
+         const val SWIPE_VELOCITY_THRESHOLD = 100
     }
 }

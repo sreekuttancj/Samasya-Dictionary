@@ -9,6 +9,8 @@ import android.widget.BaseAdapter
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import malayalamdictionary.samasya.view.MainActivity
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.helper.Common
@@ -22,6 +24,9 @@ class ListItemAdapter(context: Context,items: ArrayList<String>, mainActivity: M
     private var filteredItems: List<String> = items
     private var mainActivity: MainActivity =mainActivity
     private val mFilter = ItemFilter()
+
+    private val selectedWordLiveData = MutableLiveData<String>()
+    fun getSelectedWordLiveData(): LiveData<String> = selectedWordLiveData
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
 
@@ -43,7 +48,11 @@ class ListItemAdapter(context: Context,items: ArrayList<String>, mainActivity: M
             textViewAutoComplete.text = location
         }
 
-        textViewAutoComplete.setOnClickListener { mainActivity.fillData(filteredItems[position]) }
+        textViewAutoComplete.setOnClickListener {
+//            mainActivity.fillData(filteredItems[position])
+            selectedWordLiveData.postValue(filteredItems[position])
+        }
+
         return mConvertView
     }
 

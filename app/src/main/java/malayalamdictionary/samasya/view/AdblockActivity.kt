@@ -14,13 +14,15 @@ import com.google.android.material.snackbar.Snackbar
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.helper.Common
 import malayalamdictionary.samasya.helper.ConnectionDetector
+import javax.inject.Inject
 
 class AdblockActivity : AppCompatActivity()  {
 
     private var checkCount: Int = 0
     private var isInternetPresent: Boolean = false
     lateinit var connectionDetector: ConnectionDetector
-    private lateinit var pref: SharedPreferences
+    @Inject
+    lateinit var preference: SharedPreferences
     private  lateinit var editor: SharedPreferences.Editor
     lateinit var textViewCount: TextView
     internal val SHARE_REQUEST = 1  // The request code
@@ -32,8 +34,7 @@ class AdblockActivity : AppCompatActivity()  {
         val mToolbar = findViewById<Toolbar>(R.id.toolbar)
         textViewCount = findViewById(R.id.textView_count)
         val buttonShare = findViewById<Button>(R.id.button_share)
-        pref = applicationContext.getSharedPreferences(Common.MyPREFERENCES, Context.MODE_PRIVATE)
-        editor = pref.edit()
+        editor = preference.edit()
         connectionDetector = ConnectionDetector(applicationContext)
 
         mToolbar.title = "AdBlock"
@@ -43,7 +44,7 @@ class AdblockActivity : AppCompatActivity()  {
 
         mToolbar.setNavigationOnClickListener { finish() }
 
-        checkCount = pref.getInt(Common.COUNT, 5)
+        checkCount = preference.getInt(Common.COUNT, 5)
         if (checkCount > 0) {
             textViewCount.text = checkCount.toString()
         } else {
@@ -56,7 +57,7 @@ class AdblockActivity : AppCompatActivity()  {
         buttonShare.setOnClickListener {
             isInternetPresent = connectionDetector.isConnectingToInternet()
 
-            if (pref.getInt(Common.COUNT, 5) > 0) {
+            if (preference.getInt(Common.COUNT, 5) > 0) {
 
                 if (isInternetPresent) {
                     val sendIntent = Intent()
@@ -90,7 +91,7 @@ class AdblockActivity : AppCompatActivity()  {
         if (requestCode == SHARE_REQUEST) {
 
             if (checkCount >= 0) {
-                textViewCount.text = pref.getInt(Common.COUNT, 5).toString()
+                textViewCount.text = preference.getInt(Common.COUNT, 5).toString()
             }
 
         }

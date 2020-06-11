@@ -1,5 +1,6 @@
 package malayalamdictionary.samasya.view
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.database.SQLException
@@ -15,11 +16,14 @@ import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_history.*
+import malayalamdictionary.samasya.MyApplication
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.HistoryAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
 import malayalamdictionary.samasya.helper.HistoryItems
+import malayalamdictionary.samasya.util.FireBaseHandler
 import java.util.*
+import javax.inject.Inject
 
 class HistoryMalayalamFragment : Fragment() {
 
@@ -37,9 +41,28 @@ class HistoryMalayalamFragment : Fragment() {
     private lateinit var expandedItem: SparseBooleanArray
     var expanded = false
 
+    @Inject
+    lateinit var fireBaseHandler: FireBaseHandler
+
+    override fun onAttach(activity: Activity?) {
+        super.onAttach(activity)
+        initDagger()
+    }
+
+    private fun initDagger() {
+        (activity?.applicationContext as MyApplication)
+                .applicationComponent
+                .inject(this)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val rowView: View = inflater.inflate(R.layout.fragment_history, container, false)
 
+        return rowView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         listDataHeader = ArrayList()
         listDataChild = HashMap()
@@ -193,9 +216,7 @@ class HistoryMalayalamFragment : Fragment() {
 
         })
 
-        return rowView
     }
-
     private fun prepareListData() {
 
         getDataFromDb()
@@ -207,6 +228,12 @@ class HistoryMalayalamFragment : Fragment() {
             meaning = getMeaningFromDb(listDataHeader[i].name)
             listDataChild[listDataHeader[i].name.toString()] = meaning
         }
+
+        //track fire base event for no of history items
+        val bundle = Bundle()
+        bundle.putInt(FireBaseHandler.HISTORY_MALAYALAM_COUNT, listDataHeader.size)
+        fireBaseHandler.logFirebaseEvents(FireBaseHandler.HISTORY_MALAYALAM, bundle)
+
     }
 
 
@@ -259,8 +286,6 @@ class HistoryMalayalamFragment : Fragment() {
 
 
     private inner class HistoryTask : AsyncTask<String, String, String>() {
-
-
         override fun doInBackground(vararg params: String): String? {
             prepareListData()
 
