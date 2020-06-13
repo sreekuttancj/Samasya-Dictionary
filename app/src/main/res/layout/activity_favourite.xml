@@ -5,19 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:id="@+id/toolbar"
-        android:background="@android:color/white">
-
-    </androidx.appcompat.widget.Toolbar>
-
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:layout_below="@+id/toolbar"
         android:background="@android:color/white"
         android:elevation="6dp"

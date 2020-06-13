@@ -49,4 +49,6 @@
     <string name="ad_block">Ads Blocked</string>
     <string name="eng_mal">English - Malayalam</string>
     <string name="mal_eng">Malayalam - English</string>
+
+    <string name="done">Done</string>
 </resources>

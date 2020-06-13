@@ -17,12 +17,13 @@ import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
+import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -35,7 +36,6 @@ import kotlinx.android.synthetic.main.keyboad.*
 import malayalamdictionary.samasya.MyApplication
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.ListItemAdapter
-import malayalamdictionary.samasya.adapter.MeaningAdapter
 import malayalamdictionary.samasya.adapter.MeaningListAdapter
 import malayalamdictionary.samasya.adapter.SuggestionListAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
@@ -44,7 +44,6 @@ import malayalamdictionary.samasya.helper.ConnectionDetector
 import malayalamdictionary.samasya.helper.FlipAnimation
 import malayalamdictionary.samasya.helper.OnSwipeTouchListener
 import malayalamdictionary.samasya.util.FireBaseHandler
-import malayalamdictionary.samasya.view_model.MainViewModel
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
@@ -114,7 +113,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
         connectionDetector = ConnectionDetector(applicationContext)
-        val mainViewModel  = ViewModelProvider(this)[MainViewModel::class.java]
 
 //        Log.d("admob_id",getString(R.string.ad_unit_id));
 //        adView = (NativeExpressAdView)findViewById(R.id.adView_native);
@@ -418,6 +416,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         textChange()
 
+        autoCompleteTextView.setOnEditorActionListener { view, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
+                fillData(autoCompleteTextView.text.toString().trim { it <= ' ' })
+                return@setOnEditorActionListener true
+            }
+            false
+        }
     }
 
     private fun rateApp() {
@@ -545,12 +550,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
                 if (Common.englishToMayalayam) {
-                    autoCompleteTextView.textSize = 18f
+                    autoCompleteTextView.textSize = 20f
                 } else {
                     autoCompleteTextView.textSize = 20f
 
                 }
-
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -759,7 +763,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val mString = strings.toList()
 
             if (mString.isEmpty()) {
-                textView_word.typeface = typeButton
                 textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
                 relayout_feedback.visibility = View.VISIBLE
             }

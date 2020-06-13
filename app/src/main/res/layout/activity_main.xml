@@ -113,9 +113,12 @@
             android:focusableInTouchMode="true"
             android:visibility="gone"
             android:textSize="20sp"
-            android:gravity="center_vertical|left"
+            android:gravity="center_vertical|start"
             android:windowSoftInputMode="stateVisible"
-            android:paddingStart="16dp" />
+            android:paddingStart="16dp"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            android:imeActionLabel="@string/done"/>
 
         <TextView
             android:layout_width="match_parent"

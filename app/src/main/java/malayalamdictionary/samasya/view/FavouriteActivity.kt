@@ -15,17 +15,9 @@ class FavouriteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favourite)
 
-        setSupportActionBar(toolbar)
-        supportActionBar!!.title = "Favourite"
-        toolbar.setTitleTextColor(Color.parseColor("#000000"))
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
-
         tab_layout.addTab(tab_layout.newTab().setText("English - Malayalam"))
         tab_layout.addTab(tab_layout.newTab().setText("Malayalam - English"))
         tab_layout.tabGravity = TabLayout.GRAVITY_FILL
-
-        toolbar.setNavigationOnClickListener { finish() }
 
         val adapter = FavouritePagerAdapter(supportFragmentManager, tab_layout.tabCount)
         pager.adapter = adapter

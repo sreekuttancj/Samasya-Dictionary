@@ -16,19 +16,11 @@ class HistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
 
-        setSupportActionBar(toolbar)
-        supportActionBar!!.title = "History"
-        toolbar.setTitleTextColor(Color.parseColor("#000000"))
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        supportActionBar!!.setDisplayShowHomeEnabled(true)
-
         with(tab_layout){
             addTab(this.newTab().setText("English - Malayalam"))
             addTab(this.newTab().setText("Malayalam - English"))
             tabGravity = TabLayout.GRAVITY_FILL
         }
-
-        toolbar.setNavigationOnClickListener { finish() }
 
         val adapter = HistoryPagerAdapter(supportFragmentManager, tab_layout.tabCount)
         pager.adapter = adapter

@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FireBaseHandler @Inject constructor(private val context: Context) {
+class FireBaseHandler @Inject constructor(context: Context) {
 
     companion object{
         const val SAVE_WORD_ENGLISH ="save_word_english"
