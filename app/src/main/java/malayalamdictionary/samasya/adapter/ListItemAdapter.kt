@@ -2,6 +2,7 @@ package malayalamdictionary.samasya.adapter
 
 import android.content.Context
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,32 +10,32 @@ import android.widget.BaseAdapter
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import malayalamdictionary.samasya.view.MainActivity
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.helper.Common
 import java.util.ArrayList
 
-class ListItemAdapter(context: Context,items: ArrayList<String>, mainActivity: MainActivity): BaseAdapter(), Filterable{
+class ListItemAdapter(context: Context,items: ArrayList<String>): BaseAdapter(), Filterable{
 
     private val context=context
     private var items=items
     lateinit var textViewAutoComplete: TextView
     private var filteredItems: List<String> = items
-    private var mainActivity: MainActivity =mainActivity
     private val mFilter = ItemFilter()
 
-    private val selectedWordLiveData = MutableLiveData<String>()
-    fun getSelectedWordLiveData(): LiveData<String> = selectedWordLiveData
+    private var selectedWordLiveData: MutableLiveData<String>
 
+    init {
+        selectedWordLiveData = MutableLiveData()
+    }
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
-
         var mConvertView=convertView
         if (mConvertView == null) {
             val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             mConvertView = layoutInflater.inflate(R.layout.autocompletion_list, parent, false)
         }
+
+
         textViewAutoComplete = mConvertView!!.findViewById(R.id.textView_autocomplete)
 
         val type = Typeface.createFromAsset(context.getAssets(), "fonts/mal.ttf")
@@ -49,9 +50,15 @@ class ListItemAdapter(context: Context,items: ArrayList<String>, mainActivity: M
         }
 
         textViewAutoComplete.setOnClickListener {
-//            mainActivity.fillData(filteredItems[position])
-            selectedWordLiveData.postValue(filteredItems[position])
+            it?.let {
+                //            mainActivity.fillData(filteredItems[position])
+                Log.i("check_click","clicked ${filteredItems[position]}")
+//            selectedWordLiveData.value = filteredItems[position]
+                selectedWordLiveData.value = "sreek"
+                Log.i("check_click","clicked live val ${selectedWordLiveData.value}")
+            }
         }
+
 
         return mConvertView
     }
@@ -97,4 +104,5 @@ class ListItemAdapter(context: Context,items: ArrayList<String>, mainActivity: M
         return mFilter
     }
 
+    fun getSelectedWordLiveData() = selectedWordLiveData
 }

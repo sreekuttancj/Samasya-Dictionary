@@ -26,25 +26,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="120dp"
                 android:id="@+id/top_bar"
-                android:background="@color/colorAccent"
-
-                >
-
-
+                android:background="@color/colorAccent">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
                     android:id="@+id/card_view_toolbar"
                     android:layout_margin="10dp"
-                    app:cardUseCompatPadding="true"
-                    >
+                    app:cardUseCompatPadding="true">
                     <androidx.appcompat.widget.Toolbar
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="left|center_vertical"
                         android:id="@+id/toolbar">
-
 
                         <ImageButton
                             android:layout_width="wrap_content"
@@ -91,7 +85,6 @@
                             android:windowSoftInputMode="stateVisible"
                             android:textSize="18sp"
                             />
-
 
                         <TextView
                             android:layout_width="match_parent"
@@ -142,7 +135,6 @@
             android:id="@+id/re_first"
             android:layout_marginTop="120dp">
 
-
             <!--</FrameLayout>-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_view_list"
@@ -150,12 +142,14 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:visibility="gone">
-                <ListView
+                <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/list_view_suggestion">
+                    android:id="@+id/list_view_suggestion"
+                    android:clipToPadding="false"
+                    android:paddingBottom="?attr/actionBarSize">
 
-                </ListView>
+                </androidx.recyclerview.widget.RecyclerView>
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
@@ -164,15 +158,15 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:visibility="gone">
-                <ListView
+                <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/list_view_meaning">
+                    android:id="@+id/list_view_meaning"
+                    android:clipToPadding="true"
+                    android:paddingBottom="?attr/actionBarSize">
 
-                </ListView>
+                </androidx.recyclerview.widget.RecyclerView>
             </androidx.cardview.widget.CardView>
-
-
         </RelativeLayout>
 
         <!--second-->

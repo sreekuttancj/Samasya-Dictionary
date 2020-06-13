@@ -22,9 +22,12 @@ import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.kobakei.ratethisapp.RateThisApp
 import kotlinx.android.synthetic.main.activity_main.*
@@ -33,13 +36,15 @@ import malayalamdictionary.samasya.MyApplication
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.adapter.ListItemAdapter
 import malayalamdictionary.samasya.adapter.MeaningAdapter
+import malayalamdictionary.samasya.adapter.MeaningListAdapter
+import malayalamdictionary.samasya.adapter.SuggestionListAdapter
 import malayalamdictionary.samasya.database.DatabaseHelper
-import malayalamdictionary.samasya.di.ApplicationComponent
 import malayalamdictionary.samasya.helper.Common
 import malayalamdictionary.samasya.helper.ConnectionDetector
 import malayalamdictionary.samasya.helper.FlipAnimation
 import malayalamdictionary.samasya.helper.OnSwipeTouchListener
 import malayalamdictionary.samasya.util.FireBaseHandler
+import malayalamdictionary.samasya.view_model.MainViewModel
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
@@ -48,7 +53,8 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var listItemAdapter: ListItemAdapter
-    private lateinit var meaningAdapter: MeaningAdapter
+    private lateinit var suggestionLisAdapter: SuggestionListAdapter
+    private lateinit var meaningListAdapter: MeaningListAdapter
     private lateinit var textToSpeech: TextToSpeech
 
     private val REQ_CODE_SPEECH_INPUT = 1
@@ -76,13 +82,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     var doubleBackToExitPressedOnce = false
     var isInternetPresent: Boolean = false
+    lateinit var connectionDetector: ConnectionDetector
     lateinit var databaseHelper: DatabaseHelper
+    lateinit var myRef: DatabaseReference
 
     @Inject
     lateinit var fireBaseHandler: FireBaseHandler
 
     @Inject
     lateinit var preference: SharedPreferences
+
+    lateinit var recyclerViewSuggestion: RecyclerView
+    lateinit var recyclerViewMeaning: RecyclerView
+    lateinit var recyclerViewMeaningBack: RecyclerView
+    lateinit var recyclerViewSuggestionBack: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initDagger()
@@ -93,14 +106,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         RateThisApp.init(config)
 
         val database = FirebaseDatabase.getInstance()
-        val myRef = database.getReference("English")
+        myRef = database.getReference("English")
 
         this.type = Typeface.createFromAsset(assets, "fonts/mal.ttf")
         typeButton = Typeface.createFromAsset(assets, "fonts/mlwttkarthika.ttf")
         this.isShowKeyboard = false
         setSupportActionBar(toolbar)
         supportActionBar!!.setDisplayShowTitleEnabled(false)
-        val connectionDetector = ConnectionDetector(applicationContext)
+        connectionDetector = ConnectionDetector(applicationContext)
+        val mainViewModel  = ViewModelProvider(this)[MainViewModel::class.java]
 
 //        Log.d("admob_id",getString(R.string.ad_unit_id));
 //        adView = (NativeExpressAdView)findViewById(R.id.adView_native);
@@ -110,58 +124,32 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 //        }
 
         button_google_translate.setOnClickListener {
-            isInternetPresent = connectionDetector.isConnectingToInternet()
-            fireBaseHandler.logFirebaseEvents(FireBaseHandler.USE_GOOGLE_TRANSLATE, null)
 
-            if (isInternetPresent) {
-                val copyText = autoCompleteTextView.text.toString().trim { it <= ' ' }
-                val label = "copy"
-                var clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                val clip = ClipData.newPlainText(label, copyText)
-                clipboard.setPrimaryClip(clip)
-
-                if (Common.englishToMayalayam) {
-                    Toast.makeText(applicationContext, "Word copied to clipboard Long press to paste it into translator", Toast.LENGTH_LONG).show()
-
-                } else {
-                    Toast.makeText(applicationContext, "Copy word from search box and paste it into translator", Toast.LENGTH_LONG).show()
-
-                }
-
-                val intentTranslate = Intent(this@MainActivity, GoogleTranslateActivity::class.java)
-                startActivity(intentTranslate)
-            } else {
-                Snackbar.make(relayout_feedback, "No network connection", Snackbar.LENGTH_SHORT).show()
-            }
         }
+        recyclerViewSuggestion = list_view_suggestion as RecyclerView
+        recyclerViewSuggestionBack = list_view_suggestion_back as RecyclerView
+        recyclerViewMeaning = list_view_meaning as RecyclerView
+        recyclerViewMeaningBack = list_view_meaning_back as RecyclerView
+
         databaseHelper = DatabaseHelper(this)
-        listItemAdapter = ListItemAdapter(this, ArrayList(),this)
-        buttonFeedBack.setOnClickListener {
-
-            fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEND_TO_DB, null)
-
-            isInternetPresent = connectionDetector.isConnectingToInternet()
-
-            if (isInternetPresent) {
-                hideKey()
-                hideMalayalam(R.id.keyBoardLayout)
-                if (Common.englishToMayalayam) {
-                    myRef.child(textView_word.text.toString().trim { it <= ' ' }).setValue(textView_word.text.toString().trim { it <= ' ' })
-                }
-                Toast.makeText(applicationContext, "Thank you for your suggestion, we will update it soon", Toast.LENGTH_LONG).show()
-                relayout_feedback.visibility = View.GONE
-                card_view_list.visibility = View.GONE
-                card_view_list_back.visibility = View.GONE
-                card_view_list_meaning.visibility = View.GONE
-                card_view_list_meaning_back.visibility = View.GONE
-                autoCompleteTextView.setText("")
-
-            } else {
-                hideKey()
-                Toast.makeText(applicationContext, "No internet connection", Toast.LENGTH_LONG).show()
-            }
-        }
+        listItemAdapter = ListItemAdapter(applicationContext, ArrayList())
+        suggestionLisAdapter = SuggestionListAdapter()
+        meaningListAdapter = MeaningListAdapter()
+        recyclerViewSuggestion.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
+        recyclerViewSuggestion.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
+        recyclerViewSuggestion.itemAnimator = null
+        recyclerViewSuggestion.adapter = suggestionLisAdapter
+        recyclerViewSuggestionBack.layoutManager = LinearLayoutManager(applicationContext,LinearLayoutManager.VERTICAL, false)
+        recyclerViewSuggestionBack.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
+        recyclerViewSuggestionBack.adapter = suggestionLisAdapter
+        recyclerViewMeaning.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
+        recyclerViewMeaning.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
+        recyclerViewMeaning.adapter = meaningListAdapter
+        recyclerViewMeaningBack.layoutManager = LinearLayoutManager(applicationContext,LinearLayoutManager.VERTICAL, false)
+        recyclerViewMeaningBack.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
+        recyclerViewMeaningBack.adapter = meaningListAdapter
         adapterObservers()
+
         search_word.setOnClickListener(this)
         re_first.setOnTouchListener(object : OnSwipeTouchListener(this) {
             override fun onSwipeTop() {}
@@ -208,10 +196,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     autoCompleteTextView.setText(StringBuilder(str1).append(autoCompleteTextView.text.subSequence(cursorPossition, autoCompleteTextView.length()).toString()).toString())
                     autoCompleteTextView.setSelection(cursorPossition - 1)
 
-
                 }
-
-
             }
         }
 
@@ -294,16 +279,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         this.typedWord = ""
         this.longPressed = false
 
-
-
         rebuildDatabase()
         setViews()
-
     }
 
     private fun adapterObservers(){
-        listItemAdapter.getSelectedWordLiveData().observe(this, Observer {word ->
-           Log.i("check_listItemAdapter", " called live data and fill data: $word")
+        suggestionLisAdapter.getSuggestionLiveData().observe(this, Observer {word ->
             fillData(word)
         })
     }
@@ -421,6 +402,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         textViewHint.setOnClickListener(this)
         tv_favorite.setOnClickListener(this)
         tv_pronounce.setOnClickListener(this)
+        button_google_translate.setOnClickListener(this)
+        buttonFeedBack.setOnClickListener(this)
+
         val intent = intent
         if (intent.getStringExtra("fav") != null) {
             fromFav = intent.getStringExtra("fav")
@@ -574,8 +558,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 if (s.length > 1) {
 
                     if (Common.englishToMayalayam) {
-                        getWords()
-                        if (list_view_suggestion.adapter.count == 0) {
+
+                        suggestionLisAdapter.submitList(getWords())
+                        Log.i("check_suggestion","size: ${suggestionLisAdapter.itemCount} words: ${getWords()}")
+
+                        if (recyclerViewSuggestion.adapter?.itemCount == 0) {
                             card_view_list.visibility = View.GONE
                             textView_word.typeface = Typeface.DEFAULT
                             textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
@@ -590,7 +577,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                         getWordsMalayalam()
                         search_word.visibility = View.VISIBLE
-                        if (list_view_suggestion_back.adapter.count == 0) {
+                        if (suggestionLisAdapter.itemCount == 0) {
                             card_view_list_back.visibility = View.GONE
                             textView_word.typeface = type
                             textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
@@ -624,15 +611,14 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         })
     }
 
-    fun getWords() {
+    fun getWords():List<String>  {
 
         val myDbHelper2 = DatabaseHelper(this)
 
         try {
-
             myDbHelper2.open()
-            val c2 = myDbHelper2.readableDatabase.rawQuery("Select distinct ENG From samasya_suggestion where ENG like  '" + autoCompleteTextView.text.toString().trim { it <= ' ' }.replace("''", "").replace("'", "''") + "%'  LIMIT 20", null)
-            val strings = ArrayList<String>()
+            val c2 = myDbHelper2.readableDatabase.rawQuery("Select distinct ENG From samasya_suggestion where ENG like  '" + autoCompleteTextView.text.toString().trim { it <= ' ' }.replace("''", "").replace("'", "''") + "%'  LIMIT 10", null)
+            val strings = mutableListOf<String>()
             c2.moveToFirst()
             while (!c2.isAfterLast) {
                 strings.add(c2.getString(0).toLowerCase())
@@ -640,19 +626,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             c2.close()
-            listItemAdapter = ListItemAdapter(applicationContext, strings, this)
-            if (listItemAdapter.count != 0) {
+            if (strings.size != 0) {
                 card_view_list.visibility = View.VISIBLE
                 card_view_list_meaning.visibility = View.GONE
             }
             list_view_suggestion.visibility = View.VISIBLE
-            list_view_suggestion.adapter = listItemAdapter
 
             databaseHelper.close()
+            return strings
         } catch (sqle: SQLException) {
             throw sqle
         }
-
     }
 
     fun getWordsMalayalam() {
@@ -660,8 +644,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         try {
 
             myDbHelper2.open()
-            val c2 = myDbHelper2.readableDatabase.rawQuery("Select distinct MAL From samasya_eng_mal where MAL GLOB  '" + autoCompleteTextView.text.toString().trim { it <= ' ' }.replace("''", "").replace("'", "''") + "*'  LIMIT 20", null)
-            val strings = ArrayList<String>()
+            val c2 = myDbHelper2.readableDatabase.rawQuery("Select distinct MAL From samasya_eng_mal where MAL GLOB  '" + autoCompleteTextView.text.toString().trim { it <= ' ' }.replace("''", "").replace("'", "''") + "*'  LIMIT 10", null)
+            val strings = mutableListOf<String>()
             c2.moveToFirst()
             while (!c2.isAfterLast) {
                 strings.add(c2.getString(0))
@@ -669,22 +653,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             c2.close()
-            listItemAdapter = ListItemAdapter(applicationContext, strings, this)
-            if (listItemAdapter.count != 0) {
+            if (strings.size != 0) {
                 card_view_list_back.visibility = View.VISIBLE
                 card_view_list_meaning_back.visibility = View.GONE
             }
             list_view_suggestion_back.visibility = View.VISIBLE
-            list_view_suggestion_back.adapter = listItemAdapter
+            suggestionLisAdapter.submitList(strings)
             databaseHelper.close()
         } catch (sqle: SQLException) {
             throw sqle
         }
 
-    }
-
-    fun setText(text: String) {
-        autoCompleteTextView.setText(text)
     }
 
     private fun historyUpdate() {
@@ -726,7 +705,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             imageButton_close.visibility = View.VISIBLE
             autoCompleteTextView.visibility = View.VISIBLE
             textViewHint.visibility = View.GONE
-            autoCompleteTextView.setText(text)
+            autoCompleteTextView.setText(word)
             if (!Common.englishToMayalayam) {
                //track firebase event searched malayalam word
                 val bundle = Bundle()
@@ -756,10 +735,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             if (Common.englishToMayalayam) {
                 historyUpdate()
-                c1 = myDbHelper1.readableDatabase.rawQuery("Select * From samasya_eng_mal where ENG like '" + autoCompleteTextView.text.toString().trim { it <= ' ' }.replace("''", "").replace("'", "''") + "'", null)
+                c1 = myDbHelper1.readableDatabase.rawQuery("Select * From samasya_eng_mal where ENG like '" + word.trim { it <= ' ' }.replace("''", "").replace("'", "''") + "'", null)
             } else {
                 historyUpdate()
-                c1 = myDbHelper1.readableDatabase.rawQuery("Select * From samasya_eng_mal where MAL like '" + autoCompleteTextView.text.toString().trim { it <= ' ' }.replace("''", "").replace("'", "''") + "'", null)
+                c1 = myDbHelper1.readableDatabase.rawQuery("Select * From samasya_eng_mal where MAL like '" + word.trim { it <= ' ' }.replace("''", "").replace("'", "''") + "'", null)
             }
 
             val strings = ArrayList<String>()
@@ -777,7 +756,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
 
-            val mString = strings.toTypedArray() as Array<String>
+            val mString = strings.toList()
 
             if (mString.isEmpty()) {
                 textView_word.typeface = typeButton
@@ -785,8 +764,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 relayout_feedback.visibility = View.VISIBLE
             }
 
-            meaningAdapter = MeaningAdapter(this, mString, Common.englishToMayalayam)
-            if (meaningAdapter.count != 0) {
+            if (mString.isNotEmpty()) {
                 card_view_list_meaning.visibility = View.VISIBLE
                 card_view_list_meaning_back.visibility = View.VISIBLE
                 card_view_list.visibility = View.GONE
@@ -796,12 +774,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             //            adView.setVisibility(View.GONE);
             if (Common.englishToMayalayam) {
                 toolbar.visibility = View.VISIBLE
-                list_view_meaning.adapter = meaningAdapter
+                meaningListAdapter.submitList(mString)
             } else {
                 toolbar.visibility = View.VISIBLE
                 hideMalayalam(R.id.keyBoardLayout)
-                list_view_meaning_back.adapter = meaningAdapter
-
+                meaningListAdapter.submitList(mString)
             }
             myDbHelper1.close()
         } catch (sqle: SQLException) {
@@ -814,7 +791,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     private fun hideKey() {
         (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(autoCompleteTextView.windowToken, 0)
     }
-
 
     private fun speak() {
 
@@ -934,7 +910,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 speakToText()
             }
 
-
             R.id.imageButton_close -> {
 
                 autoCompleteTextView.setText("")
@@ -985,6 +960,57 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     speak()
                 } else {
                     Toast.makeText(applicationContext, "Pronunciation is not available for malayalam words", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            R.id.button_google_translate -> {
+                isInternetPresent = connectionDetector.isConnectingToInternet()
+                fireBaseHandler.logFirebaseEvents(FireBaseHandler.USE_GOOGLE_TRANSLATE, null)
+
+                if (isInternetPresent) {
+                    val copyText = autoCompleteTextView.text.toString().trim { it <= ' ' }
+                    val label = "copy"
+                    var clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    val clip = ClipData.newPlainText(label, copyText)
+                    clipboard.setPrimaryClip(clip)
+
+                    if (Common.englishToMayalayam) {
+                        Toast.makeText(applicationContext, "Word copied to clipboard Long press to paste it into translator", Toast.LENGTH_LONG).show()
+
+                    } else {
+                        Toast.makeText(applicationContext, "Copy word from search box and paste it into translator", Toast.LENGTH_LONG).show()
+
+                    }
+
+                    val intentTranslate = Intent(this@MainActivity, GoogleTranslateActivity::class.java)
+                    startActivity(intentTranslate)
+                } else {
+                    Snackbar.make(relayout_feedback, "No network connection", Snackbar.LENGTH_SHORT).show()
+                }
+            }
+
+            R.id.buttonFeedBack -> {
+                fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEND_TO_DB, null)
+
+                isInternetPresent = connectionDetector.isConnectingToInternet()
+
+                if (isInternetPresent) {
+                    hideKey()
+                    hideMalayalam(R.id.keyBoardLayout)
+                    if (Common.englishToMayalayam) {
+                        myRef.child(textView_word.text.toString().trim { it <= ' ' }).setValue(textView_word.text.toString().trim { it <= ' ' })
+                    }
+                    Toast.makeText(applicationContext, "Thank you for your suggestion, we will update it soon", Toast.LENGTH_LONG).show()
+                    relayout_feedback.visibility = View.GONE
+                    card_view_list.visibility = View.GONE
+                    card_view_list_back.visibility = View.GONE
+                    card_view_list_meaning.visibility = View.GONE
+                    card_view_list_meaning_back.visibility = View.GONE
+                    autoCompleteTextView.setText("")
+
+                } else {
+                    hideKey()
+                    Toast.makeText(applicationContext, "No internet connection", Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -1249,4 +1275,5 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 .applicationComponent
                 .inject(this)
     }
+
 }

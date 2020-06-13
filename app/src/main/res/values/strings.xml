@@ -10,7 +10,7 @@
 
 
     <string name="home">Home</string>
-    <string name="favourite">Favourite</string>
+    <string name="favourite">Saved</string>
     <string name="history">History</string>
     <string name="share_app">Share this app</string>
     <string name="rate_app">Rate us</string>
@@ -43,7 +43,7 @@
     <string name="searchWordHint">Search</string>
     <string name="searchWordHintMalayalam">XncbpI</string>
     <string name="feedback">Sorry, Word not found Please send this word to us </string>
-    <string name="add_to_favorite">Add to Favorite</string>
+    <string name="add_to_favorite">Save word</string>
     <string name="pronunciation">Pronunciation</string>
 
     <string name="ad_block">Ads Blocked</string>
