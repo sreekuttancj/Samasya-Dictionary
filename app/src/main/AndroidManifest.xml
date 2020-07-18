@@ -9,7 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".MyApplication"
+        android:name=".app.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -17,7 +17,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <activity android:name=".view.MainActivity"
+        <activity android:name="malayalamdictionary.samasya.app.home.view.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -26,15 +26,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.FavouriteActivity"
+        <activity android:name="malayalamdictionary.samasya.app.favorite.view.FavouriteActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.HistoryActivity"
+        <activity android:name="malayalamdictionary.samasya.app.history.view.HistoryActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.GoogleTranslateActivity"
+        <activity android:name="malayalamdictionary.samasya.app.translator.view.GoogleTranslateActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.AboutUsActivity"
+        <activity android:name="malayalamdictionary.samasya.app.about.view.AboutUsActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.AdblockActivity"
+        <activity android:name=".app.adblocker.view.AdblockActivity"
             android:screenOrientation="portrait"/>
 
     </application>
