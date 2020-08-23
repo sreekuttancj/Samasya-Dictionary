@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_about_us.*
+import kotlinx.android.synthetic.main.toolbar.*
 import malayalamdictionary.samasya.R
 
 class AboutUsActivity : AppCompatActivity() {

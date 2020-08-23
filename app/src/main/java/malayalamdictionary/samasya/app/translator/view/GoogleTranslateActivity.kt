@@ -9,6 +9,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_google_translaet.*
+import kotlinx.android.synthetic.main.toolbar.*
 import malayalamdictionary.samasya.R
 
 class GoogleTranslateActivity : AppCompatActivity() {

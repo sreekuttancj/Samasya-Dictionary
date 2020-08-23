@@ -1,6 +1,7 @@
 package malayalamdictionary.samasya.app.home.view
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.*
 import android.database.Cursor
 import android.database.SQLException
@@ -33,6 +34,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.kobakei.ratethisapp.RateThisApp
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.keyboad.*
+import malayalamdictionary.samasya.BuildConfig
 import malayalamdictionary.samasya.app.MyApplication
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.app.home.view.adapter.MeaningListAdapter
@@ -47,6 +49,9 @@ import malayalamdictionary.samasya.app.about.view.AboutUsActivity
 import malayalamdictionary.samasya.app.favorite.view.FavouriteActivity
 import malayalamdictionary.samasya.app.translator.view.GoogleTranslateActivity
 import malayalamdictionary.samasya.app.history.view.HistoryActivity
+import malayalamdictionary.samasya.app.util.Mapper
+import malayalamdictionary.samasya.domain.firebase.AppUpdate
+import malayalamdictionary.samasya.domain.firebase.RemoteConfig
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
@@ -94,6 +99,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     @Inject
     lateinit var connectionDetector: ConnectionDetector
 
+    @Inject
+    lateinit var remoteConfig: RemoteConfig
+
     lateinit var recyclerViewSuggestion: RecyclerView
     lateinit var recyclerViewMeaning: RecyclerView
     lateinit var recyclerViewMeaningBack: RecyclerView
@@ -106,6 +114,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         val config = RateThisApp.Config(3, 5)
         RateThisApp.init(config)
+
+        initObserver()
 
         val database = FirebaseDatabase.getInstance()
         myRef = database.getReference("English")
@@ -140,6 +150,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         recyclerViewSuggestion.adapter = suggestionLisAdapter
         recyclerViewSuggestionBack.layoutManager = LinearLayoutManager(applicationContext,LinearLayoutManager.VERTICAL, false)
         recyclerViewSuggestionBack.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
+        recyclerViewSuggestionBack.itemAnimator = null
         recyclerViewSuggestionBack.adapter = suggestionLisAdapter
         recyclerViewMeaning.layoutManager = LinearLayoutManager(applicationContext, LinearLayoutManager.VERTICAL, false)
         recyclerViewMeaning.addItemDecoration(DividerItemDecoration(this,DividerItemDecoration.VERTICAL))
@@ -286,6 +297,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun adapterObservers(){
         suggestionLisAdapter.getSuggestionLiveData().observe(this, Observer {word ->
+            suggestionLisAdapter.submitList(emptyList())
             fillData(word)
         })
     }
@@ -356,7 +368,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             hideMalayalam(R.id.keyBoardLayout)
             textViewHint.text = getString(R.string.eng_mal)
-            fab_swip.setImageResource(R.drawable.e)
+            fab_swip.setImageResource(R.drawable.mala)
 
             //track fire base event for fab click`
             fireBaseHandler.logFirebaseEvents(FireBaseHandler.FAB_M, null)
@@ -374,7 +386,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             imageButtonMic.visibility = View.GONE
             textViewHint.text = getString(R.string.mal_eng)
-            fab_swip.setImageResource(R.drawable.mala)
+            fab_swip.setImageResource(R.drawable.e)
 
             //track fire base event for fab click`
             fireBaseHandler.logFirebaseEvents(FireBaseHandler.FAB_E, null)
@@ -385,6 +397,28 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     fun onCardClick(view: View) {
         flipCard()
+    }
+
+    private fun initObserver(){
+        remoteConfig.getAppUpdateLiveData().observe(this, Observer {
+            if (BuildConfig.VERSION_NAME < it.version ?:"" && it.forceUpdate)
+            {
+                showAppUpdateDialog(it)
+            }
+        })
+    }
+
+    private fun showAppUpdateDialog(appUpdate: AppUpdate){
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle(appUpdate.title)
+        alertDialog.setMessage(appUpdate.description)
+        alertDialog.setNegativeButton(getString(R.string.cancel)) { dialog, which ->
+            dialog.dismiss()
+        }
+        alertDialog.setPositiveButton(getString(R.string.update)){dialog, which ->
+            rateApp()
+        }
+        alertDialog.show()
     }
 
     private fun setViews() {
@@ -405,17 +439,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         tv_pronounce.setOnClickListener(this)
         button_google_translate.setOnClickListener(this)
         buttonFeedBack.setOnClickListener(this)
-
-        val intent = intent
-        if (intent.getStringExtra("fav") != null) {
-            fromFav = intent.getStringExtra("fav")
-            fillData(fromFav)
-
-        }
-        if (intent.getStringExtra("his") != null) {
-            fromHis = intent.getStringExtra("his")
-            fillData(fromHis)
-        }
 
         textChange()
 
@@ -561,19 +584,20 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
                 if (s.length > 1) {
 
                     if (Common.englishToMayalayam) {
+                        val suggestionList = getWords()
+                        suggestionLisAdapter.submitList(suggestionList)
+                        Log.i("check_suggestion","size: ${suggestionList.size} words: ${suggestionList.size}")
 
-                        suggestionLisAdapter.submitList(getWords())
-                        Log.i("check_suggestion","size: ${suggestionLisAdapter.itemCount} words: ${getWords()}")
-
-                        if (recyclerViewSuggestion.adapter?.itemCount == 0) {
+                        if (suggestionList.isEmpty()) {
                             card_view_list.visibility = View.GONE
                             textView_word.typeface = Typeface.DEFAULT
                             textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
                             relayout_feedback.visibility = View.VISIBLE
+                            card_view_list_meaning.visibility = View.GONE
+                            card_view_list_meaning_back.visibility = View.GONE
                         } else {
                             relayout_feedback.visibility = View.GONE
                         }
@@ -582,20 +606,22 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         //adView.setVisibility(View.GONE);
                     } else {
 
-                        getWordsMalayalam()
+                        val suggestionList = getWordsMalayalam()
+                        suggestionLisAdapter.submitList(suggestionList)
+                        Log.i("check_mal_suggestion","size: ${suggestionList.size} words: ${suggestionList.size}")
+
                         search_word.visibility = View.VISIBLE
-                        if (suggestionLisAdapter.itemCount == 0) {
+                        if (suggestionList.isEmpty()) {
                             card_view_list_back.visibility = View.GONE
                             textView_word.typeface = type
                             textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
                             relayout_feedback.visibility = View.VISIBLE
+                            card_view_list_meaning.visibility = View.GONE
+                            card_view_list_meaning_back.visibility = View.GONE
                         } else {
                             relayout_feedback.visibility = View.GONE
                         }
                     }
-
-
-                    imageButton_close.visibility = View.VISIBLE
                     imageButtonMic.visibility = View.GONE
                     fab_swip.visibility = View.GONE
                 } else {
@@ -606,10 +632,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     }
                     imageButton_close.visibility = View.GONE
                     card_view_list.visibility = View.GONE
+                    card_view_list_back.visibility= View.GONE
                     card_view_list_meaning_back.visibility = View.GONE
                     card_view_list_meaning.visibility = View.GONE
-//                    toolbar.visibility = View.GONE
-                    }
+                    relayout_feedback.visibility = View.GONE
+                    toolbar.visibility = View.VISIBLE
+                }
             }
 
             override fun afterTextChanged(s: Editable) {
@@ -646,7 +674,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    fun getWordsMalayalam() {
+    fun getWordsMalayalam(): List<String>{
         val myDbHelper2 = DatabaseHelper(this)
         try {
 
@@ -665,12 +693,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 card_view_list_meaning_back.visibility = View.GONE
             }
             list_view_suggestion_back.visibility = View.VISIBLE
-            suggestionLisAdapter.submitList(strings)
             databaseHelper.close()
+            return strings
         } catch (sqle: SQLException) {
             throw sqle
         }
-
     }
 
     private fun historyUpdate() {
@@ -709,26 +736,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun fillData(word: String) {
-            imageButton_close.visibility = View.VISIBLE
-            autoCompleteTextView.visibility = View.VISIBLE
-            textViewHint.visibility = View.GONE
-            autoCompleteTextView.setText(word)
-            if (!Common.englishToMayalayam) {
-               //track firebase event searched malayalam word
-                val bundle = Bundle()
-                bundle.putString(FireBaseHandler.SEARCH_MALAYALAM_WORD,word)
-                fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEARCH_MALAYALAM, bundle)
+        imageButton_close.visibility = View.VISIBLE
+        autoCompleteTextView.visibility = View.VISIBLE
+        textViewHint.visibility = View.GONE
+        autoCompleteTextView.setText(word)
+        if (!Common.englishToMayalayam) {
+            //track firebase event searched malayalam word
+            val bundle = Bundle()
+            bundle.putString(FireBaseHandler.SEARCH_MALAYALAM_WORD,word)
+            fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEARCH_MALAYALAM, bundle)
 
-                autoCompleteTextView.typeface = type
-            } else {
-                //track firebase event searched english word
-                val bundle = Bundle()
-                bundle.putString(FireBaseHandler.SEARCH_ENGLISH_WORD,word)
-                fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEARCH_ENGLISH, bundle)
+            autoCompleteTextView.typeface = type
+        } else {
+            //track firebase event searched english word
+            val bundle = Bundle()
+            bundle.putString(FireBaseHandler.SEARCH_ENGLISH_WORD,word)
+            fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEARCH_ENGLISH, bundle)
 
-                autoCompleteTextView.typeface = Typeface.DEFAULT
-            }
-            autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
+            autoCompleteTextView.typeface = Typeface.DEFAULT
+        }
+        autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
 
         imageButtonMic.visibility = View.GONE
         search_word.visibility = View.GONE
@@ -765,32 +792,30 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             val mString = strings.toList()
 
-            if (mString.isEmpty()) {
-                textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
-                relayout_feedback.visibility = View.VISIBLE
-            }
-
             list_view_meaning.visibility = View.VISIBLE
             //            adView.setVisibility(View.GONE);
             if (Common.englishToMayalayam) {
                 toolbar.visibility = View.VISIBLE
-                meaningListAdapter = MeaningListAdapter()
-                recyclerViewMeaning.adapter = meaningListAdapter
                 meaningListAdapter.submitList(mString)
             } else {
                 toolbar.visibility = View.VISIBLE
                 hideMalayalam(R.id.keyBoardLayout)
-                meaningListAdapter = MeaningListAdapter()
-                recyclerViewMeaningBack.adapter = meaningListAdapter
                 meaningListAdapter.submitList(mString)
             }
 
             if (mString.isNotEmpty()) {
                 card_view_list_meaning.visibility = View.VISIBLE
                 card_view_list_meaning_back.visibility = View.VISIBLE
-                card_view_list.visibility = View.GONE
-                card_view_list_back.visibility = View.GONE
+                relayout_feedback.visibility = View.GONE
+            }else{
+                card_view_list_meaning.visibility = View.GONE
+                card_view_list_meaning_back.visibility = View.GONE
+                textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
+                relayout_feedback.visibility = View.VISIBLE
             }
+            card_view_list.visibility = View.GONE
+            card_view_list_back.visibility = View.GONE
+
             myDbHelper1.close()
         } catch (sqle: SQLException) {
             throw sqle
@@ -933,7 +958,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
                 relayout_feedback.visibility = View.GONE
                 toolbar.visibility = View.VISIBLE
-                showKey()
+                if (Common.englishToMayalayam){
+                    showKey()
+                }else{
+                    showKeyboard()
+                }
             }
 
             R.id.textViewHint -> {
@@ -959,6 +988,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 fireBaseHandler.logFirebaseEvents(FireBaseHandler.SEARCH_MALAYALAM_IMAGE_BUTTON, bundle)
 
                 hideMalayalam(R.id.keyBoardLayout)
+                suggestionLisAdapter.submitList(emptyList())
                 fillData(malayalamWord)
             }
 
@@ -1315,5 +1345,4 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             recyclerViewSuggestionBack.scrollToPosition(0)
         }
     }
-
 }

@@ -51,4 +51,6 @@
     <string name="mal_eng">Malayalam - English</string>
 
     <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="update">Update</string>
 </resources>
