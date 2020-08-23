@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_history.*
+import kotlinx.android.synthetic.main.toolbar.*
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.app.history.view.adapter.HistoryPagerAdapter
 
@@ -12,6 +13,14 @@ class HistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_history)
+
+        with(toolbar){
+            setSupportActionBar(this)
+            supportActionBar!!.setDisplayShowTitleEnabled(false)
+            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+            this.setNavigationOnClickListener { finish() }
+            this.title = getString(R.string.history)
+        }
 
         with(tab_layout){
             addTab(this.newTab().setText("English - Malayalam"))
