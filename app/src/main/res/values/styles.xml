@@ -7,6 +7,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="buttonStyle">@style/MyButton</item>
+        <item name="drawerArrowStyle">@style/DrawerIcon</item>
     </style>
 
     <style name="MyButton" parent="Widget.AppCompat.Button">
@@ -31,5 +32,8 @@
         <item name="android:textColor">#ffffffff</item>
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/button_style</item>
+    </style>
+    <style name="DrawerIcon" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@color/white</item>
     </style>
 </resources>

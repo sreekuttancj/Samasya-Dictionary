@@ -4,40 +4,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@android:color/white">
-
-    </androidx.appcompat.widget.Toolbar>
-
-
-    <FrameLayout
-        android:id="@+id/frame_shadow"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@drawable/shape" />
-
-    </FrameLayout>
+    <include layout="@layout/toolbar"/>
 
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/frame_shadow">
+        android:layout_below="@+id/toolbar">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            >
+            android:background="@color/white">
 
             <ImageView
                 android:id="@+id/imageViweLogo"
@@ -139,9 +119,7 @@
                     android:gravity="center"
                     android:padding="15dp"
                     android:text="@string/btn_whats_app"
-                    android:textColor="@android:color/black"
-
-                    />
+                    android:textColor="@android:color/black" />
 
                 <View
                     android:id="@+id/SplitLine_hor6"
@@ -156,5 +134,4 @@
 
         </RelativeLayout>
     </ScrollView>
-
 </RelativeLayout>
