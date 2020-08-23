@@ -9,11 +9,14 @@ import malayalamdictionary.samasya.app.di.module.ApplicationModule
 import malayalamdictionary.samasya.app.history.view.HistoryEnglishFragment
 import malayalamdictionary.samasya.app.history.view.HistoryMalayalamFragment
 import malayalamdictionary.samasya.app.home.view.MainActivity
+import malayalamdictionary.samasya.domain.firebase.RemoteConfig
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [ApplicationModule::class])
 interface ApplicationComponent {
+
+    fun providesRemoteConfig(): RemoteConfig
 
     fun inject(myApplication: MyApplication)
 

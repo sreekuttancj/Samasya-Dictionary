@@ -7,6 +7,7 @@ import malayalamdictionary.samasya.app.di.module.ApplicationModule
 import malayalamdictionary.samasya.app.util.AppUpdateHandler
 import malayalamdictionary.samasya.app.util.FireBaseHandler
 import malayalamdictionary.samasya.app.util.UpdateType
+import malayalamdictionary.samasya.domain.firebase.RemoteConfig
 import javax.inject.Inject
 
 
@@ -19,12 +20,16 @@ class MyApplication: Application() {
     @Inject
     lateinit var appUpdateHandler: AppUpdateHandler
 
+    @Inject
+    lateinit var firebaseRemoteConfig: RemoteConfig
+
     override fun onCreate() {
         super.onCreate()
 
         initDagger()
         fireBaseHandler.initFireBase()
         appUpdateHandler.checkForUpdate(UpdateType.FLEXIBLE)
+        firebaseRemoteConfig.initRemoteConfig()
     }
 
     private fun initDagger() {
