@@ -1,6 +1,7 @@
 package malayalamdictionary.samasya.app.home.view.adapter
 
 import android.graphics.Typeface
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,7 +50,8 @@ class SuggestionListAdapter: ListAdapter<String, SuggestionListAdapter.Suggestio
         }
         itemView.textView_autocomplete.text = data
         itemView.setOnClickListener{
-            suggestionLiveData.value = getItem(position)
+            Log.i("suggestion_click","pos: $position")
+            suggestionLiveData.value = data
         }
     }
 

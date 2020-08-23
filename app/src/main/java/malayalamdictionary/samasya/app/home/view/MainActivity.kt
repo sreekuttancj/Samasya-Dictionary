@@ -32,6 +32,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.kobakei.ratethisapp.RateThisApp
+import io.reactivex.Observable
+import io.reactivex.ObservableEmitter
+import io.reactivex.ObservableOnSubscribe
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.keyboad.*
 import malayalamdictionary.samasya.BuildConfig
@@ -49,11 +54,12 @@ import malayalamdictionary.samasya.app.about.view.AboutUsActivity
 import malayalamdictionary.samasya.app.favorite.view.FavouriteActivity
 import malayalamdictionary.samasya.app.translator.view.GoogleTranslateActivity
 import malayalamdictionary.samasya.app.history.view.HistoryActivity
-import malayalamdictionary.samasya.app.util.Mapper
+import malayalamdictionary.samasya.app.util.updateText
 import malayalamdictionary.samasya.domain.firebase.AppUpdate
 import malayalamdictionary.samasya.domain.firebase.RemoteConfig
 import java.io.IOException
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -205,7 +211,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 cursorPossition = autoCompleteTextView.selectionStart
                 if (cursorPossition != 0) {
                     val str1 = autoCompleteTextView.text.subSequence(0, cursorPossition - 1).toString()
-                    autoCompleteTextView.setText(StringBuilder(str1).append(autoCompleteTextView.text.subSequence(cursorPossition, autoCompleteTextView.length()).toString()).toString())
+                    autoCompleteTextView.updateText(StringBuilder(str1).append(autoCompleteTextView.text.subSequence(cursorPossition, autoCompleteTextView.length()).toString()).toString())
                     autoCompleteTextView.setSelection(cursorPossition - 1)
 
                 }
@@ -356,7 +362,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         if (re_first.visibility == View.GONE) {
             autoCompleteTextView.typeface = Typeface.DEFAULT
-            autoCompleteTextView.setText("")
+            autoCompleteTextView.updateText("")
             autoCompleteTextView.visibility = View.GONE
             flipAnimation.reverse()
             Common.englishToMayalayam = true
@@ -375,7 +381,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         } else {
             val font = Typeface.createFromAsset(assets, "fonts/mlwttkarthika.ttf")
             autoCompleteTextView.typeface = font
-            autoCompleteTextView.setText("")
+            autoCompleteTextView.updateText("")
             Common.englishToMayalayam = false
             textViewHint.visibility = View.VISIBLE
             autoCompleteTextView.visibility = View.GONE
@@ -421,6 +427,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         alertDialog.show()
     }
 
+    lateinit var textEmitter: ObservableEmitter<String>
     private fun setViews() {
 
         initNavigationDrawer()
@@ -440,7 +447,73 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         button_google_translate.setOnClickListener(this)
         buttonFeedBack.setOnClickListener(this)
 
-        textChange()
+
+        Observable.create(ObservableOnSubscribe<String> { subscriber ->
+            textEmitter = subscriber
+            autoCompleteTextView.addTextChangedListener(textWatcher)
+        }).map{ text -> text.toLowerCase().trim() }
+                .debounce(350, TimeUnit.MILLISECONDS)
+                .distinctUntilChanged()
+                .filter { text -> text.isNotBlank() }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { text ->
+                    Log.i("check_debounce", "text: $text")
+                    if (text.length > 1) {
+
+                        if (Common.englishToMayalayam) {
+                            val suggestionList = getWords(text.toString())
+                            suggestionLisAdapter.submitList(suggestionList)
+                            Log.i("check_suggestion","size: ${suggestionList.size} words: ${suggestionList.size}")
+
+                            if (suggestionList.isEmpty()) {
+                                card_view_list.visibility = View.GONE
+                                textView_word.typeface = Typeface.DEFAULT
+                                textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
+                                relayout_feedback.visibility = View.VISIBLE
+                                card_view_list_meaning.visibility = View.GONE
+                                card_view_list_meaning_back.visibility = View.GONE
+                            } else {
+                                relayout_feedback.visibility = View.GONE
+                            }
+                            search_word.visibility = View.GONE
+                            toolbar.visibility = View.GONE
+                            //adView.setVisibility(View.GONE);
+                        } else {
+
+                            val suggestionList = getWordsMalayalam(text.toString())
+                            suggestionLisAdapter.submitList(suggestionList)
+                            Log.i("check_mal_suggestion","size: ${suggestionList.size} words: ${suggestionList.size}")
+
+                            search_word.visibility = View.VISIBLE
+                            if (suggestionList.isEmpty()) {
+                                card_view_list_back.visibility = View.GONE
+                                textView_word.typeface = type
+                                textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
+                                relayout_feedback.visibility = View.VISIBLE
+                                card_view_list_meaning.visibility = View.GONE
+                                card_view_list_meaning_back.visibility = View.GONE
+                            } else {
+                                relayout_feedback.visibility = View.GONE
+                            }
+                        }
+                        imageButtonMic.visibility = View.GONE
+                        fab_swip.visibility = View.GONE
+                    } else {
+
+                        fab_swip.visibility = View.VISIBLE
+                        if (Common.englishToMayalayam) {
+                            imageButtonMic.visibility = View.VISIBLE
+                        }
+                        imageButton_close.visibility = View.GONE
+                        card_view_list.visibility = View.GONE
+                        card_view_list_back.visibility= View.GONE
+                        card_view_list_meaning_back.visibility = View.GONE
+                        card_view_list_meaning.visibility = View.GONE
+                        relayout_feedback.visibility = View.GONE
+                        toolbar.visibility = View.VISIBLE
+                    }
+                }
 
         autoCompleteTextView.setOnEditorActionListener { view, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
@@ -448,6 +521,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 return@setOnEditorActionListener true
             }
             false
+        }
+    }
+
+    private val textWatcher = object : TextWatcher{
+        override fun afterTextChanged(s: Editable?) {
+
+        }
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            if (autoCompleteTextView.hasFocus()) {
+                textEmitter.onNext(s.toString())
+            }
         }
     }
 
@@ -571,88 +659,13 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    private fun textChange() {
-        autoCompleteTextView.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-                if (Common.englishToMayalayam) {
-                    autoCompleteTextView.textSize = 20f
-                } else {
-                    autoCompleteTextView.textSize = 20f
-
-                }
-            }
-
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                if (s.length > 1) {
-
-                    if (Common.englishToMayalayam) {
-                        val suggestionList = getWords()
-                        suggestionLisAdapter.submitList(suggestionList)
-                        Log.i("check_suggestion","size: ${suggestionList.size} words: ${suggestionList.size}")
-
-                        if (suggestionList.isEmpty()) {
-                            card_view_list.visibility = View.GONE
-                            textView_word.typeface = Typeface.DEFAULT
-                            textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
-                            relayout_feedback.visibility = View.VISIBLE
-                            card_view_list_meaning.visibility = View.GONE
-                            card_view_list_meaning_back.visibility = View.GONE
-                        } else {
-                            relayout_feedback.visibility = View.GONE
-                        }
-                        search_word.visibility = View.GONE
-                        toolbar.visibility = View.GONE
-                        //adView.setVisibility(View.GONE);
-                    } else {
-
-                        val suggestionList = getWordsMalayalam()
-                        suggestionLisAdapter.submitList(suggestionList)
-                        Log.i("check_mal_suggestion","size: ${suggestionList.size} words: ${suggestionList.size}")
-
-                        search_word.visibility = View.VISIBLE
-                        if (suggestionList.isEmpty()) {
-                            card_view_list_back.visibility = View.GONE
-                            textView_word.typeface = type
-                            textView_word.text = autoCompleteTextView.text.toString().trim { it <= ' ' }
-                            relayout_feedback.visibility = View.VISIBLE
-                            card_view_list_meaning.visibility = View.GONE
-                            card_view_list_meaning_back.visibility = View.GONE
-                        } else {
-                            relayout_feedback.visibility = View.GONE
-                        }
-                    }
-                    imageButtonMic.visibility = View.GONE
-                    fab_swip.visibility = View.GONE
-                } else {
-
-                    fab_swip.visibility = View.VISIBLE
-                    if (Common.englishToMayalayam) {
-                        imageButtonMic.visibility = View.VISIBLE
-                    }
-                    imageButton_close.visibility = View.GONE
-                    card_view_list.visibility = View.GONE
-                    card_view_list_back.visibility= View.GONE
-                    card_view_list_meaning_back.visibility = View.GONE
-                    card_view_list_meaning.visibility = View.GONE
-                    relayout_feedback.visibility = View.GONE
-                    toolbar.visibility = View.VISIBLE
-                }
-            }
-
-            override fun afterTextChanged(s: Editable) {
-
-            }
-        })
-    }
-
-    fun getWords():List<String>  {
+    fun getWords(query: String):List<String>  {
 
         val myDbHelper2 = DatabaseHelper(this)
 
         try {
             myDbHelper2.open()
-            val c2 = myDbHelper2.readableDatabase.rawQuery("Select distinct ENG From samasya_suggestion where ENG like  '" + autoCompleteTextView.text.toString().trim { it <= ' ' }.replace("''", "").replace("'", "''") + "%'  LIMIT 10", null)
+            val c2 = myDbHelper2.readableDatabase.rawQuery("Select distinct ENG From samasya_suggestion where ENG like  '" + query.trim { it <= ' ' }.replace("''", "").replace("'", "''") + "%'  LIMIT 10", null)
             val strings = mutableListOf<String>()
             c2.moveToFirst()
             while (!c2.isAfterLast) {
@@ -674,12 +687,12 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    fun getWordsMalayalam(): List<String>{
+    fun getWordsMalayalam(query: String): List<String>{
         val myDbHelper2 = DatabaseHelper(this)
         try {
 
             myDbHelper2.open()
-            val c2 = myDbHelper2.readableDatabase.rawQuery("Select distinct MAL From samasya_eng_mal where MAL GLOB  '" + autoCompleteTextView.text.toString().trim { it <= ' ' }.replace("''", "").replace("'", "''") + "*'  LIMIT 10", null)
+            val c2 = myDbHelper2.readableDatabase.rawQuery("Select distinct MAL From samasya_eng_mal where MAL GLOB  '" + query.trim { it <= ' ' }.replace("''", "").replace("'", "''") + "*'  LIMIT 10", null)
             val strings = mutableListOf<String>()
             c2.moveToFirst()
             while (!c2.isAfterLast) {
@@ -739,7 +752,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         imageButton_close.visibility = View.VISIBLE
         autoCompleteTextView.visibility = View.VISIBLE
         textViewHint.visibility = View.GONE
-        autoCompleteTextView.setText(word)
+        autoCompleteTextView.updateText(word)
         if (!Common.englishToMayalayam) {
             //track firebase event searched malayalam word
             val bundle = Bundle()
@@ -755,7 +768,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             autoCompleteTextView.typeface = Typeface.DEFAULT
         }
-        autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
 
         imageButtonMic.visibility = View.GONE
         search_word.visibility = View.GONE
@@ -869,7 +881,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         when (requestCode) {
             REQ_CODE_SPEECH_INPUT -> if (resultCode == Activity.RESULT_OK && null != data) {
                 val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                autoCompleteTextView.setText(result[0])
+                autoCompleteTextView.updateText(result[0])
                 autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
                 imageButtonMic.visibility = View.GONE
                 textViewHint.visibility = View.GONE
@@ -948,7 +960,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             R.id.imageButton_close -> {
 
-                autoCompleteTextView.setText("")
+                autoCompleteTextView.updateText("")
                 card_view_list.visibility = View.GONE
                 card_view_list_meaning.visibility = View.GONE
                 card_view_list_back.visibility = View.GONE
@@ -1044,7 +1056,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     card_view_list_back.visibility = View.GONE
                     card_view_list_meaning.visibility = View.GONE
                     card_view_list_meaning_back.visibility = View.GONE
-                    autoCompleteTextView.setText("")
+                    autoCompleteTextView.updateText("")
 
                 } else {
                     hideKey()
@@ -1196,7 +1208,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 text = autoCompleteTextView.text.toString()
 
                 if (charIndex >= 0) {
-                    autoCompleteTextView.setText(StringBuilder((text.subSequence(0, charIndex)).toString()).append(this.button.text).append(text.subSequence(charIndex, text.length)).toString())
+                    autoCompleteTextView.updateText(StringBuilder((text.subSequence(0, charIndex)).toString()).append(this.button.text).append(text.subSequence(charIndex, text.length)).toString())
                     if (autoCompleteTextView.selectionStart != autoCompleteTextView.length()) {
                         autoCompleteTextView.setSelection(charIndex + 1)
                     }
@@ -1220,7 +1232,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 charIndex = autoCompleteTextView.selectionStart
                 text = autoCompleteTextView.text.toString()
                 if (charIndex >= 0) {
-                    autoCompleteTextView.setText(StringBuilder((text.subSequence(0, charIndex)).toString()).append(this.button.text).append(text.subSequence(charIndex, text.length)).toString())
+                    autoCompleteTextView.updateText(StringBuilder((text.subSequence(0, charIndex)).toString()).append(this.button.text).append(text.subSequence(charIndex, text.length)).toString())
                     if (autoCompleteTextView.selectionStart != autoCompleteTextView.length()) {
                         autoCompleteTextView.setSelection(charIndex + 1)
                     }
@@ -1244,7 +1256,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 charIndex = autoCompleteTextView.selectionStart
                 text = autoCompleteTextView.text.toString()
                 if (charIndex >= 0) {
-                    autoCompleteTextView.setText(StringBuilder((text.subSequence(0, charIndex)).toString()).append(button.text).append(text.subSequence(charIndex, text.length)).toString())
+                    autoCompleteTextView.updateText(StringBuilder((text.subSequence(0, charIndex)).toString()).append(button.text).append(text.subSequence(charIndex, text.length)).toString())
                     if (autoCompleteTextView.selectionStart != autoCompleteTextView.length()) {
                         autoCompleteTextView.setSelection(charIndex + 1)
                     }
@@ -1269,7 +1281,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 charIndex = autoCompleteTextView.selectionStart
                 text = autoCompleteTextView.text.toString()
                 if (charIndex >= 0) {
-                    autoCompleteTextView.setText(StringBuilder((text.subSequence(0, charIndex)).toString()).append(button.text).append(text.subSequence(charIndex, text.length)).toString())
+                    autoCompleteTextView.updateText(StringBuilder((text.subSequence(0, charIndex)).toString()).append(button.text).append(text.subSequence(charIndex, text.length)).toString())
                     if (autoCompleteTextView.selectionStart != autoCompleteTextView.length()) {
                         autoCompleteTextView.setSelection(charIndex + 1)
                     }
