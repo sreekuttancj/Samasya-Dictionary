@@ -38,6 +38,8 @@ class MeaningListAdapter: ListAdapter<String, MeaningListAdapter.MeaningViewHold
         return MeaningViewHolder(view)
     }
 
+
+
     override fun onBindViewHolder(holder: MeaningViewHolder, position: Int) {
         val itemView = holder.itemView
         val data = getItem(position)

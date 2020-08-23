@@ -303,7 +303,6 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun adapterObservers(){
         suggestionLisAdapter.getSuggestionLiveData().observe(this, Observer {word ->
-            suggestionLisAdapter.submitList(emptyList())
             fillData(word)
         })
     }
@@ -659,7 +658,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     }
 
-    fun getWords(query: String):List<String>  {
+    private fun getWords(query: String):List<String>  {
 
         val myDbHelper2 = DatabaseHelper(this)
 
@@ -687,7 +686,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-    fun getWordsMalayalam(query: String): List<String>{
+    private fun getWordsMalayalam(query: String): List<String>{
         val myDbHelper2 = DatabaseHelper(this)
         try {
 
@@ -805,6 +804,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             val mString = strings.toList()
 
             list_view_meaning.visibility = View.VISIBLE
+            meaningListAdapter = MeaningListAdapter()
+            recyclerViewMeaning.adapter = meaningListAdapter
+            recyclerViewMeaningBack.adapter = meaningListAdapter
+
             //            adView.setVisibility(View.GONE);
             if (Common.englishToMayalayam) {
                 toolbar.visibility = View.VISIBLE
