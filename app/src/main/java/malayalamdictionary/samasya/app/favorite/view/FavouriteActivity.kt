@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_favourite.*
+import kotlinx.android.synthetic.main.toolbar.*
 import malayalamdictionary.samasya.R
 import malayalamdictionary.samasya.app.favorite.view.adapter.FavouritePagerAdapter
 
@@ -11,6 +12,14 @@ class FavouriteActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favourite)
+
+        with(toolbar){
+            setSupportActionBar(this)
+            supportActionBar!!.setDisplayShowTitleEnabled(false)
+            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+            this.setNavigationOnClickListener { finish() }
+            this.title = getString(R.string.favourite)
+        }
 
         tab_layout.addTab(tab_layout.newTab().setText("English - Malayalam"))
         tab_layout.addTab(tab_layout.newTab().setText("Malayalam - English"))

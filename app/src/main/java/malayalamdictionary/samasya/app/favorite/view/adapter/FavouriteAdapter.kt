@@ -31,15 +31,15 @@ class FavouriteAdapter(context: Context, listDataHeader: MutableList<FavouriteIt
         try {
             return this.listDataHeader[groupPosition]
         }
-    catch (e : Exception )
-    {
-        Toast.makeText(mContext, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
-    }
-    return true
+        catch (e : Exception )
+        {
+            Toast.makeText(mContext, "Please close expanded words before selection", Toast.LENGTH_SHORT).show()
+        }
+        return true
     }
 
     override fun isChildSelectable(p0: Int, p1: Int): Boolean {
-        return true
+        return false
     }
 
     override fun hasStableIds(): Boolean {

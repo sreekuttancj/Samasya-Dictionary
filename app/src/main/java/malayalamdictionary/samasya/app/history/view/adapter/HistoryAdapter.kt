@@ -21,6 +21,10 @@ class HistoryAdapter(context: Context, listDataHeader:MutableList<HistoryItems>,
     private var englishMalayalam: Boolean= englishMalayalam
     private var mSelectedItemsIds: SparseBooleanArray = SparseBooleanArray()
 
+    init {
+        mSelectedItemsIds = SparseBooleanArray()
+    }
+
     override fun getGroup(groupPosition: Int): Any {
         try {
 
@@ -146,5 +150,5 @@ class HistoryAdapter(context: Context, listDataHeader:MutableList<HistoryItems>,
     fun toggleSelection(position: Int) {
         selectView(position, !mSelectedItemsIds.get(position))
     }
- 
+
 }
