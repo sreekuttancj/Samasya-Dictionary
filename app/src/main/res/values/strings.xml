@@ -5,12 +5,12 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
 
-    <string name="app_version">Samasya 1.6</string>
+    <string name="app_version">Samasya 1.7</string>
     <!--<string name="ad_unit_id"> ca-app-pub-3940256099942544/1033173712</string>-->
 
 
     <string name="home">Home</string>
-    <string name="favourite">Favourite</string>
+    <string name="favourite">Saved</string>
     <string name="history">History</string>
     <string name="share_app">Share this app</string>
     <string name="rate_app">Rate us</string>
@@ -43,8 +43,14 @@
     <string name="searchWordHint">Search</string>
     <string name="searchWordHintMalayalam">XncbpI</string>
     <string name="feedback">Sorry, Word not found Please send this word to us </string>
+    <string name="add_to_favorite">Save word</string>
+    <string name="pronunciation">Pronunciation</string>
 
     <string name="ad_block">Ads Blocked</string>
     <string name="eng_mal">English - Malayalam</string>
     <string name="mal_eng">Malayalam - English</string>
+
+    <string name="done">Done</string>
+    <string name="cancel">Cancel</string>
+    <string name="update">Update</string>
 </resources>

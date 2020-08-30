@@ -5,19 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:id="@+id/toolbar"
-        android:background="@android:color/white"/>
+    <include layout="@layout/toolbar"/>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:layout_below="@+id/toolbar"
         android:background="@android:color/white"
-        android:elevation="6dp"
         android:minHeight="?attr/actionBarSize"
         app:tabTextColor="@android:color/black"
         app:tabSelectedTextColor="@android:color/black"
@@ -28,25 +23,17 @@
 
         />
 
-    <FrameLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/frame_shadow"
-        android:layout_below="@+id/tab_layout">
-
-        <!-- **** Place Your Content Here **** -->
-
-        <View android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@drawable/shape"/>
-
-    </FrameLayout>
-
+    <View android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:id="@+id/tab_indicator"
+        android:background="@color/divider_color"
+        android:layout_below="@+id/tab_layout" />
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/frame_shadow"
+        android:layout_below="@+id/tab_indicator"
         />
 
 </RelativeLayout>
